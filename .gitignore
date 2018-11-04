@@ -1,0 +1,12 @@
+/vendor/
+/.codelite/
+/log/*.log
+!/log/README.md
+.DS_Store
+._*
+cv-admin-php*.phprj
+cv-admin-php*.workspace
+config/config.ini
+config/config.json
+composer.lock
+nap/functions/checkAuth.php
