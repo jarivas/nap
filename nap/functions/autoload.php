@@ -1,22 +1,23 @@
 <?php
-//loading the framework
-define('NAP_CORE_DIR', NAP_DIR . 'Core');
-foreach(array_slice(scandir(NAP_CORE_DIR), 2) as $file)
-    require NAP_CORE_DIR . DIRECTORY_SEPARATOR . $file;
-
-//setting dependencies
-define('DEPENCIES_DIR', ROOT_DIR . 'dependencies' . DIRECTORY_SEPARATOR);
-require DEPENCIES_DIR . 'loadDependencies.php';
-
 //autoload
+define('NAP_CORE_DIR', NAP_DIR . 'Core');
 define('SRC_DIR', ROOT_DIR . 'src' . DIRECTORY_SEPARATOR);
 
-function auto_loader($class) {
-    $class = str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
-    
-    //log_writer('info', $class);
-    
-    require SRC_DIR . $class;
-}
+$loader = require ROOT_DIR . 'vendor'. DIRECTORY_SEPARATOR . 'autoload.php';
 
-spl_autoload_register('auto_loader');
+$loader->addPsr4('Nap\\', [NAP_CORE_DIR]);
+$loader->addPsr4('App\\', [SRC_DIR]);
+
+//configuration
+require FUNCTIONS_DIR . 'loadConfig.php';
+
+//DB
+$persistence = null;
+$db = &$appConfig['db'];
+
+switch ($db['type']) {
+    case 'mongo': $persistence = Nap\MongoDbPersistance::setDb($db);
+        break;
+    case 'sleek': $persistence = Nap\SleekDbPersistance::setDb($db);
+        break;
+}

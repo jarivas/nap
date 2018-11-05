@@ -4,8 +4,8 @@
 !/log/README.md
 .DS_Store
 ._*
-cv-admin-php*.phprj
-cv-admin-php*.workspace
+*.phprj
+*.workspace
 config/config.ini
 config/config.json
 composer.lock

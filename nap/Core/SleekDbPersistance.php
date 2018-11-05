@@ -1,15 +1,16 @@
 <?php
-use Nap\Response;
 
-class SleekDbPersistance extends Nap\Persistence{
+namespace Nap;
+
+class SleekDbPersistance extends Persistence{
     const CRITERIA_EQUAL = '=';
     const CRITERIA_NOT_EQUAL = '!=';
     const CRITERIA_GREATER_THAN = '>';
     const CRITERIA_GREATER_THAN_EQUAL = '>=';
     const CRITERIA_LESS_THAN = '<';
     const CRITERIA_LESS_THAN_EQUAL = '<=';
-    const VALID_CRITERIA = [CRITERIA_EQUAL, CRITERIA_NOT_EQUAL, CRITERIA_GREATER_THAN, CRITERIA_GREATER_THAN_EQUAL,
-        CRITERIA_LESS_THAN, CRITERIA_LESS_THAN_EQUAL];
+    const VALID_CRITERIA = [self::CRITERIA_EQUAL, self::CRITERIA_NOT_EQUAL, self::CRITERIA_GREATER_THAN,
+    self::CRITERIA_GREATER_THAN_EQUAL, self::CRITERIA_LESS_THAN, self::CRITERIA_LESS_THAN_EQUAL];
     
     public function __construct($datasetName) {
         $this->dataset = self::$database->store($datasetName);
@@ -20,7 +21,7 @@ class SleekDbPersistance extends Nap\Persistence{
         
         self::$database = new \SleekDB\SleekDB($path);
         
-        return SleekDbPersistance;
+        return 'Nap\\SleekDbPersistance';
     }
     
     protected function formatCriteria(array &$criteria){

@@ -1,6 +1,8 @@
 <?php
 use Nap\Logger;
 use Nap\Response;
+use \Exception;
+
 
 function error_handler($errno, $errstr, $errfile, $errline) {
     $message = sprintf('%s %s:%s', $errstr, $errfile, $errline);

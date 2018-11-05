@@ -9,9 +9,6 @@ define('FUNCTIONS_DIR', NAP_DIR  . 'functions' . DIRECTORY_SEPARATOR);
 //log_writer allows to debug autoload
 require FUNCTIONS_DIR . 'log_writer.php';
 
-//configuration
-require FUNCTIONS_DIR . 'loadConfig.php';
-
 //autoload
 require FUNCTIONS_DIR . 'autoload.php';
 
@@ -22,6 +19,5 @@ require FUNCTIONS_DIR . 'errorHandler.php';
 require FUNCTIONS_DIR . 'requestValidation.php';
 
 //start
-$controller .= 'Controller';
 $result = call_user_func_array([$controller, $action], [$params, $persistence]);
 Nap\Response::ok($result);

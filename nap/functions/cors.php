@@ -1,5 +1,7 @@
 <?php
 use Nap\Response;
+use \Exception;
+
 
 if(isset($appConfig['cors'])) {
     //Allowed method

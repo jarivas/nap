@@ -1,6 +1,11 @@
 <?php
+
+namespace App;
+
+use \Exception;
 use Nap\Controller;
 use Nap\Response;
+
 
 class BasicController extends Controller {
     

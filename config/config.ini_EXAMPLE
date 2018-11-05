@@ -11,9 +11,9 @@ password = pass
 
 [db]
 type = sleek
-host = /home/user/data/
+host = /home/user/data
 dbName = cv
 
 [test]
-actions = create,read,update,delete
-requireAuth = create,update,delete
+actions = add,get,set,remove
+requireAuth = add,set,remove

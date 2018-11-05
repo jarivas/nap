@@ -1,6 +1,7 @@
 <?php
+namespace Nap;
 
-class MongoDbPersistance extends Nap\Persistence {
+class MongoDbPersistance extends Persistence {
 
     public function __construct(string $datasetName) {
         $this->dataset = self::$database->selectCollection($datasetName);
@@ -13,7 +14,7 @@ class MongoDbPersistance extends Nap\Persistence {
         
         self::$database = $client->selectDatabase($db['dbName']);
         
-        return self;
+        return "Nap\\MongoDbPersistance";
     }
 
     public function create(array $item) {

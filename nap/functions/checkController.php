@@ -1,10 +1,10 @@
 <?php
 use Nap\Response;
+use \Exception;
 
-$urlParams = array_slice(explode('/', $_SERVER['PATH_INFO']), 1);
+$urlParams = array_slice(explode('/', $_SERVER['REQUEST_URI']), 1);
 $controller = $urlParams[0];
 $action = $urlParams[1];
-unset($urlParams);
 
 //present check
 if(empty($controller) || empty($action) )
@@ -21,22 +21,29 @@ if(in_array($action, $appConfig[$controller]['requireAuth']))
 switch($method){
     case 'POST': $params = json_decode(file_get_contents('php://input'), true);
         break;
-    case 'GET' : $params = isset($_GET['criteria']) ? json_decode($_GET['criteria'], true) : [];
+    case 'GET' : $params = isset($urlParams[2]) ? json_decode(urldecode($urlParams[2]), true) : [];
         break;
     case 'PUT':
-        $criteria = json_decode($_GET['criteria'], true);
+        if(empty($urlParams[2]))
+            throw new Exception('criteria is missing', Response::WARNING_TYPE_BAD_REQUEST);
+            
+        $criteria = json_decode(urldecode($urlParams[2]), true);
         $params = json_decode(file_get_contents('php://input'), true);
         
-        if(empty($criteria) || empty($params)) 
+        if(empty($params) || empty($params)) 
             throw new Exception('criteria or params is missing', Response::WARNING_TYPE_BAD_REQUEST);
             
         $params = ['criteria' => $criteria, 'params' => $params];
 
         break;
     case 'DELETE':
-        $params = json_decode($_GET['criteria'], true);
+        if(empty($urlParams[2]))
+            throw new Exception('criteriais missing', Response::WARNING_TYPE_BAD_REQUEST);
+            
+        $params = json_decode(urldecode($urlParams[2]), true);
         
         if(empty($params))
             throw new Exception('criteria is missing', Response::WARNING_TYPE_BAD_REQUEST);
         break;
 }
+$controller = 'App\\' . ucfirst($controller) . 'Controller';
