@@ -14,7 +14,7 @@ class MongoDbPersistance extends Persistence {
         
         self::$database = $client->selectDatabase($db['dbName']);
         
-        return "Nap\\MongoDbPersistance";
+        return __CLASS__;
     }
 
     public function create(array $item) {

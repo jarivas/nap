@@ -21,7 +21,7 @@ class SleekDbPersistance extends Persistence{
         
         self::$database = new \SleekDB\SleekDB($path);
         
-        return 'Nap\\SleekDbPersistance';
+        return __CLASS__;
     }
     
     protected function formatCriteria(array &$criteria){
