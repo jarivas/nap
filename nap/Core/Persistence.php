@@ -6,7 +6,7 @@ abstract class Persistence {
     protected $dataset;
 
     public static function setDb(array &$db){
-        return Persistence;
+        return __CLASS__;
     }
     
     abstract public function create(array $item);
