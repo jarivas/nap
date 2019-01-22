@@ -2,15 +2,9 @@
 
 //A php file cache system is recommended like OPcache
 
-define('ROOT_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR);
-define('NAP_DIR', ROOT_DIR . 'nap' . DIRECTORY_SEPARATOR);
-define('FUNCTIONS_DIR', NAP_DIR  . 'functions' . DIRECTORY_SEPARATOR);
+require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'nap' . DIRECTORY_SEPARATOR . 'load.php';
 
-//log_writer allows to debug autoload
 require FUNCTIONS_DIR . 'log_writer.php';
-
-//autoload
-require FUNCTIONS_DIR . 'autoload.php';
 
 //error handling
 require FUNCTIONS_DIR . 'errorHandler.php';
