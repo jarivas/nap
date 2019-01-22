@@ -1,5 +1,4 @@
 <?php
-use \Exception;
 use Nap\Response;
 
 define('CONFIG_DIR', ROOT_DIR . 'config' . DIRECTORY_SEPARATOR);

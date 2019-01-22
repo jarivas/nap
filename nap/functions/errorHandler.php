@@ -1,7 +1,6 @@
 <?php
 use Nap\Logger;
 use Nap\Response;
-use \Exception;
 
 
 function error_handler($errno, $errstr, $errfile, $errline) {
@@ -34,7 +33,7 @@ function exception_handler($exception) {
         Logger::info($message);
         Response::warning($code, $message);
     } else {
-        error_handler($code, $message, $file, $line);
+        error_handler(null, $message, $file, $line);
     }
 }
 

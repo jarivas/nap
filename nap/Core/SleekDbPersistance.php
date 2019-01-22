@@ -2,66 +2,45 @@
 
 namespace Nap;
 
-class SleekDbPersistance extends Persistence{
-    const CRITERIA_EQUAL = '=';
-    const CRITERIA_NOT_EQUAL = '!=';
-    const CRITERIA_GREATER_THAN = '>';
-    const CRITERIA_GREATER_THAN_EQUAL = '>=';
-    const CRITERIA_LESS_THAN = '<';
-    const CRITERIA_LESS_THAN_EQUAL = '<=';
-    const VALID_CRITERIA = [self::CRITERIA_EQUAL, self::CRITERIA_NOT_EQUAL, self::CRITERIA_GREATER_THAN,
-    self::CRITERIA_GREATER_THAN_EQUAL, self::CRITERIA_LESS_THAN, self::CRITERIA_LESS_THAN_EQUAL];
-    
-    public function __construct($datasetName) {
-        $this->dataset = self::$database->store($datasetName);
-    }
-    
-    public static function setDb(array &$db) {
+class SleekDbPersistance extends Persistence {
+
+    protected $path;
+
+    public static function setDb(array &$db): string {
         $path = $db['host'] . DIRECTORY_SEPARATOR . $db['dbName'];
-        
+
         self::$database = new \SleekDB\SleekDB($path);
-        
+
         return __CLASS__;
     }
-    
-    protected function formatCriteria(array &$criteria){
-        $dummy = '';
-        $condition = '';
-        
-        foreach($criteria as $fieldName => $value){
-            $dummy = json_decode($value);
-            
-            if(is_array($dummy)){
-                $condition = &$dummy['condition'];
-                
-                if(! in_array($condition, self::VALID_CRITERIA))
-                    throw new Exception("Invalid condition in criteria", Response::WARNING_TYPE_BAD_REQUEST);
-                
-                $this->dataset->where($fieldName, $condition, $dummy['value']);
-            } else
-                $this->dataset->where($fieldName, self::CRITERIA_EQUAL, $dummy);
-        }
-    }
-    
-    public function create(array $item) {
-        return $this->dataset->insert($item);
+
+    public function __construct($datasetName) {
+        $this->dataset = self::$database->store($datasetName, self::$database->dataDirectory);
     }
 
-    public function read(array $criteria) {
-        $this->formatCriteria($criteria);
+    public function create(array $item): bool {
+        $result = $this->dataset->insert($item);
         
+        return ($result) ? true : false;
+    }
+
+    public function read(array $criteria): array {
+        foreach ($criteria as $fieldName => $value)
+            $this->dataset->where($fieldName, Persistence::CRITERIA_EQUAL, $value);
+
         return $this->dataset->fetch();
     }
 
-    public function update(array $criteria, array $item) {
-        $this->formatCriteria($criteria);
-        
+    public function update(array $criteria, array $item): bool {
+        $this->dataset->where('_id', Persistence::CRITERIA_EQUAL, $criteria['_id']);
+
         return $this->dataset->update($item);
     }
 
-    public function delete(array $criteria) {
-        $this->formatCriteria($criteria);
-        
+    public function delete(array $criteria): bool {
+        $this->dataset->where('_id', Persistence::CRITERIA_EQUAL, $criteria['_id']);
+
         return $this->dataset->delete();
     }
+
 }

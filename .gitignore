@@ -12,3 +12,4 @@ composer.lock
 nap/functions/checkAuth.php
 /nbproject/*
 nbproject/*
+data/*
