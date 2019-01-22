@@ -1,0 +1,158 @@
+{
+	"info": {
+		"_postman_id": "fb4a0b3e-1999-4087-a18b-ae34c6a05da7",
+		"name": "nap",
+		"description": "Test request to demo the framework usage",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"array\": [\n            1,\n            2,\n            3\n        ],\n        \"boolean\": true,\n        \"null\": null,\n        \"number\": 123,\n        \"object\": {\n            \"a\": \"b\",\n            \"c\": \"d\",\n            \"e\": \"f\"\n        },\n        \"string\": \"Hello World\"\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8000/test/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"test",
+						"add"
+					]
+				},
+				"description": "The request to add random data to the db"
+			},
+			"response": []
+		},
+		{
+			"name": "GetAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/test/get/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"test",
+						"get",
+						""
+					]
+				},
+				"description": "The request to get all the exisiting data"
+			},
+			"response": []
+		},
+		{
+			"name": "Get",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/test/get/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"test",
+						"get",
+						"1"
+					]
+				},
+				"description": "The request to get one specific document"
+			},
+			"response": []
+		},
+		{
+			"name": "Set",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "auth",
+						"value": "b2619aa1529dfdc4248e6edbf3c1b2a2b014cf6d",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"array\": [\n            1,\n            2,\n            3\n        ],\n        \"boolean\": true,\n        \"null\": null,\n        \"number\": 123,\n        \"object\": {\n            \"a\": \"b\",\n            \"c\": \"d\",\n            \"e\": \"f\"\n        },\n        \"string\": \"Hello World ASD\"\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8000/test/set/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"test",
+						"set",
+						"1"
+					]
+				},
+				"description": "The request to update one specific document"
+			},
+			"response": []
+		},
+		{
+			"name": "Remove",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/test/remove/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"test",
+						"remove",
+						"1"
+					]
+				},
+				"description": "The request to remove one specific document"
+			},
+			"response": []
+		}
+	]
+}
