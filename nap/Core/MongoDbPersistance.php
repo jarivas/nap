@@ -28,9 +28,9 @@ class MongoDbPersistance extends Persistence {
         return ($result->getInsertedCount()) ? true : false;
     }
 
-    public function read(array $criteria): array {
+    public function read(array $criteria, array $options): array {
         /** @var Cursor  **/
-        $result = $this->dataset->find($criteria);
+        $result = $this->dataset->find($criteria, $options);
         
         return ($result) ? $result->toArray() : [];
     }

@@ -24,9 +24,20 @@ class SleekDbPersistance extends Persistence {
         return ($result) ? true : false;
     }
 
-    public function read(array $criteria): array {
+    public function read(array $criteria, array $options): array {
         foreach ($criteria as $fieldName => $value)
             $this->dataset->where($fieldName, Persistence::CRITERIA_EQUAL, $value);
+        
+        if(isset($options['limit']) && is_int($options['limit']))
+            $this->dataset->limit($options['limit']);
+        
+        if(isset($options['skip']) && is_int($options['skip']))
+            $this->dataset->skip($options['skip']);
+        
+        if(isset($options['orderBy']) && is_array($options['orderBy'])){
+            $o = $options['orderBy'];
+            $this->dataset->orderBy($o['order'], $o['field']);
+        }
 
         return $this->dataset->fetch();
     }

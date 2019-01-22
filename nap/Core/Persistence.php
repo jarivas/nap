@@ -19,7 +19,7 @@ abstract class Persistence {
 
     abstract public function create(array $item): bool;
 
-    abstract public function read(array $criteria): array;
+    abstract public function read(array $criteria, array $options): array;
 
     abstract public function update(array $criteria, array $item): bool;
 
