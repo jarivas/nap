@@ -20,6 +20,12 @@ trait Controller {
         return $dataset->read($params);
     }
     
+    public static function readOne(array &$params, string &$persistence): array {
+        $dataset = new $persistence(static::$datasetName);
+        
+        return $dataset->readOne($params);
+    }
+    
     public static function update(array &$params, string &$persistence): bool {
         $dataset = new $persistence(static::$datasetName);
         
