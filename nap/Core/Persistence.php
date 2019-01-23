@@ -19,9 +19,9 @@ abstract class Persistence {
 
     abstract public function create(array $item): bool;
 
-    abstract public function read(array $criteria, array $options): array;
+    abstract public function read(array $criteria, array $options = []): array;
     
-    public function readOne(array $criteria, array $options): array{
+    public function readOne(array $criteria, array $options = []): array{
         $options['limit'] = 1;
         $result = $this->read($criteria, $options);
         
