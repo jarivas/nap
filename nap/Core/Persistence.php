@@ -25,7 +25,7 @@ abstract class Persistence {
         $options['limit'] = 1;
         $result = $this->read($criteria, $options);
         
-        if($count($result) == 1)
+        if(count($result) == 1)
             $result = $result[0];
         
         return $result;
