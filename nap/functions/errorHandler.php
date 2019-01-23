@@ -4,7 +4,10 @@ use Nap\Response;
 
 
 function error_handler($errno, $errstr, $errfile, $errline) {
-    $message = sprintf('%s %s:%s', $errstr, $errfile, $errline);
+    global $appConfig;
+    
+    $message = ($appConfig['system']['debug']) ? sprintf('%s %s:%s', $errstr, $errfile, $errline) 
+            : $errstr;
     
     switch($errno) {
         case E_WARNING : Logger::warning($message);
@@ -23,13 +26,17 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 }
 
 function exception_handler($exception) {
+    global $appConfig;
+    
     $code = $exception->getCode();
     $message = $exception->getMessage();
     $file = $exception->getFile();
     $line = $exception->getLine();
     
     if($code){
-        $message = sprintf('%s %s:%s', $message, $file, $line);
+        if($appConfig['system']['debug'])
+            $message = sprintf('%s %s:%s', $message, $file, $line);
+        
         Logger::info($message);
         Response::warning($code, $message);
     } else {
