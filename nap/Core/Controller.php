@@ -4,6 +4,10 @@ namespace Nap;
 trait Controller {
     protected static $datasetName = '';
     
+    public static function getDatasetName(){
+        return self::$datasetName;
+    }
+    
     public static function create(array &$params, string &$persistence): bool {
         $dataset = new $persistence(static::$datasetName);
         
