@@ -29,8 +29,12 @@ switch ($method) {
         if (!empty($urlParams[2])) {
             $params = json_decode(urldecode($urlParams[2]), true);
             
-            if (!is_array($params))
-                $params = ['_id' => $params];
+            if ($params){
+                if (!is_array($params))
+                    $params = ['_id' => $params];
+            } else {
+                $params = ['_id' => urldecode($urlParams[2])];
+            }
         }
         break;
     //UPDATE
