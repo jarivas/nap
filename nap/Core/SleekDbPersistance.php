@@ -43,13 +43,15 @@ class SleekDbPersistance extends Persistence {
     }
 
     public function update(array $criteria, array $item): bool {
-        $this->dataset->where('_id', Persistence::CRITERIA_EQUAL, $criteria['_id']);
+        foreach ($criteria as $fieldName => $value)
+            $this->dataset->where($fieldName, Persistence::CRITERIA_EQUAL, $value);
 
         return $this->dataset->update($item);
     }
 
     public function delete(array $criteria): bool {
-        $this->dataset->where('_id', Persistence::CRITERIA_EQUAL, $criteria['_id']);
+        foreach ($criteria as $fieldName => $value)
+            $this->dataset->where($fieldName, Persistence::CRITERIA_EQUAL, $value);
 
         return $this->dataset->delete();
     }
