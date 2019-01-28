@@ -24,7 +24,7 @@ class SleekDbPersistance extends Persistence {
         return ($result) ? true : false;
     }
 
-    public function read(array $criteria, array $options): array {
+    public function read(array $criteria, array $options = []): array {
         foreach ($criteria as $fieldName => $value)
             $this->dataset->where($fieldName, Persistence::CRITERIA_EQUAL, $value);
         
