@@ -17,7 +17,7 @@ if(isset($appConfig['cors'])) {
         header("Access-Control-Allow-Methods: $allowedMethods, OPTIONS");
         
         if($method == 'OPTIONS')
-            Respose::okEmpty(Respose::OK_TYPE_NO_CONTENT);
+            Response::okEmpty(Response::OK_TYPE_NO_CONTENT);
     };
         
     if($allowedOrigin == '*') {
