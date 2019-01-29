@@ -15,7 +15,7 @@ if(isset($appConfig['cors'])) {
     $corsOK = function() use($allowedMethods, $isOptions) {
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept, Origin, Authorization');
-        header("Access-Control-Allow-Methods: $allowedMethods, OPTIONS");
+        header("Access-Control-Allow-Methods: $allowedMethods");
         
         if($isOptions)
             Response::okEmpty(Response::OK_TYPE_NO_CONTENT);
