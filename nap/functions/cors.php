@@ -4,20 +4,17 @@ use Nap\Response;
 
 if(isset($appConfig['cors'])) {
     //Allowed method
-    $isOptions = ($method == 'OPTIONS');
     $allowedMethods = &$appConfig['cors']['allowed-methods'];
     
-    if(!$isOptions && stripos($allowedMethods, $method) === false)
+    if(stripos($allowedMethods, $method) === false)
         throw new Exception('Method not allowed', Response::WARNING_TYPE_METHOD_NOT_ALLOWED);
     
-    //Allowed origin
-    $allowedOrigin = &$appConfig['cors']['allowed-origin'];
-    $corsOK = function() use($allowedMethods, $isOptions) {
+    $corsOK = function() use($allowedMethods, $method) {
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept, Origin, Authorization');
         header("Access-Control-Allow-Methods: $allowedMethods");
         
-        if($isOptions)
+        if($method == 'OPTIONS')
             Response::okEmpty(Response::OK_TYPE_NO_CONTENT);
     };
         
