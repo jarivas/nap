@@ -11,13 +11,14 @@ if(isset($appConfig['cors'])) {
     
     $corsOK = function() use($allowedMethods, $method) {
         header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept, Origin, Authorization');
+        //header('Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept, Origin, Authorization');
         header("Access-Control-Allow-Methods: $allowedMethods");
         
         if($method == 'OPTIONS')
             Response::okEmpty(Response::OK_TYPE_NO_CONTENT);
     };
-        
+    
+    $allowedOrigin = &$appConfig['cors']['allowed-origin'];
     if($allowedOrigin == '*') {
         $corsOK();
     } else  {
