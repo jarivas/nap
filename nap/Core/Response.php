@@ -19,7 +19,8 @@ class Response {
     }
     
     public static function okEmpty(int $ok_type){
-        self::helper($ok_type, '');
+        http_response_code($ok_type);
+        die;
     }
     
     public static function okHelper($result){
