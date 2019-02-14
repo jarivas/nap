@@ -4,37 +4,39 @@ namespace Nap;
 
 class SleekDbPersistance extends Persistence {
 
-    protected $path;
+    protected static $path;
+    protected static $conf = [
+        'auto_cache' => false,
+        'timeout' => 5
+    ];
 
     public static function setDb(array &$db): string {
-        $path = $db['host'] . DIRECTORY_SEPARATOR . $db['dbName'];
-
-        self::$database = new \SleekDB\SleekDB($path);
-
+        self::$path = $db['host'] . DIRECTORY_SEPARATOR . $db['dbName'];
+        
         return __CLASS__;
     }
 
     public function __construct($datasetName) {
-        $this->dataset = self::$database->store($datasetName, self::$database->dataDirectory);
+        $this->dataset = \SleekDB\SleekDB::store($datasetName, self::$path, self::$conf);
     }
 
     public function create(array $item): bool {
         $result = $this->dataset->insert($item);
-        
+
         return ($result) ? true : false;
     }
 
     public function read(array $criteria, array $options = []): array {
         foreach ($criteria as $fieldName => $value)
             $this->dataset->where($fieldName, Persistence::CRITERIA_EQUAL, $value);
-        
-        if(isset($options['limit']) && is_int($options['limit']))
+
+        if (isset($options['limit']) && is_int($options['limit']))
             $this->dataset->limit($options['limit']);
-        
-        if(isset($options['skip']) && is_int($options['skip']))
+
+        if (isset($options['skip']) && is_int($options['skip']))
             $this->dataset->skip($options['skip']);
-        
-        if(isset($options['orderBy']) && is_array($options['orderBy'])){
+
+        if (isset($options['orderBy']) && is_array($options['orderBy'])) {
             $o = $options['orderBy'];
             $this->dataset->orderBy($o['order'], $o['field']);
         }
