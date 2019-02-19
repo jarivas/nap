@@ -2,7 +2,6 @@
 debug = true
 
 [cors]
-allowed-origin = *
 allowed-methods = GET, POST, PUT, DELETE, OPTIONS
 allowed-headers = Content-Type, Accept, Origin
 
