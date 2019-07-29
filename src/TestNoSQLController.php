@@ -2,6 +2,6 @@
 
 namespace App;
 
-class TestController extends BasicController {
+class TestNoSQLController extends BasicNoSQLController {
     protected static $datasetName = 'Test';
 }

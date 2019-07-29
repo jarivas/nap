@@ -16,8 +16,8 @@ $persistence = null;
 $db = &$appConfig['db'];
 
 switch ($db['type']) {
-    case 'mongo': $persistence = Nap\MongoDbPersistance::setDb($db);
+    case 'mongo': $persistence = Nap\MongoDbPersistence::setDb($db);
         break;
-    case 'sleek': $persistence = Nap\SleekDbPersistance::setDb($db);
+    case 'sleek': $persistence = Nap\SleekDbPersistence::setDb($db);
         break;
 }

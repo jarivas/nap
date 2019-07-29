@@ -2,7 +2,7 @@
 
 namespace Nap;
 
-class SleekDbPersistance extends Persistence {
+class SleekDbPersistence extends NoSQLPersistence {
 
     protected static $path;
     protected static $conf = [
@@ -12,7 +12,7 @@ class SleekDbPersistance extends Persistence {
 
     public static function setDb(array &$db): string {
         self::$path = $db['host'] . DIRECTORY_SEPARATOR . $db['dbName'];
-        
+
         return __CLASS__;
     }
 
@@ -28,7 +28,7 @@ class SleekDbPersistance extends Persistence {
 
     public function read(array $criteria, array $options = []): array {
         foreach ($criteria as $fieldName => $value)
-            $this->dataset->where($fieldName, Persistence::CRITERIA_EQUAL, $value);
+            $this->dataset->where($fieldName, NoSQLPersistence::CRITERIA_EQUAL, $value);
 
         if (isset($options['limit']) && is_int($options['limit']))
             $this->dataset->limit($options['limit']);
@@ -46,14 +46,14 @@ class SleekDbPersistance extends Persistence {
 
     public function update(array $criteria, array $item): bool {
         foreach ($criteria as $fieldName => $value)
-            $this->dataset->where($fieldName, Persistence::CRITERIA_EQUAL, $value);
+            $this->dataset->where($fieldName, NoSQLPersistence::CRITERIA_EQUAL, $value);
 
         return $this->dataset->update($item);
     }
 
     public function delete(array $criteria): bool {
         foreach ($criteria as $fieldName => $value)
-            $this->dataset->where($fieldName, Persistence::CRITERIA_EQUAL, $value);
+            $this->dataset->where($fieldName, NoSQLPersistence::CRITERIA_EQUAL, $value);
 
         return $this->dataset->delete();
     }

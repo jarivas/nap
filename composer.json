@@ -1,5 +1,14 @@
 {
-    "require": {
-        "rakibtg/sleekdb": "^1.0"
-    }
+    "name": "jarivas/nap",
+    "description": "An extremly simple rest PHP framework",
+    "type": "project",
+    "license": "MIT-3.0",
+    "authors": [
+        {
+            "name": "Jose Rivas",
+            "email": "me@jarivas.work"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
 }

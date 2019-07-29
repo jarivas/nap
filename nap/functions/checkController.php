@@ -26,28 +26,14 @@ switch ($method) {
         break;
     //READ
     case 'GET':
-        if (!empty($urlParams[2])) {
-            $params = json_decode(urldecode($urlParams[2]), true);
-            
-            if ($params){
-                if (!is_array($params))
-                    $params = ['_id' => $params];
-            } else {
-                $params = ['_id' => urldecode($urlParams[2])];
-            }
-        }
+        $params = (!empty($urlParams[2])) ? json_decode(urldecode($urlParams[2]), true) : $_GET;
         break;
     //UPDATE
     case 'PUT':
-        if (empty($urlParams[2]))
+        if (empty($urlParams[2]) && !count($_GET))
             throw new Exception('criteria is missing', Response::WARNING_TYPE_BAD_REQUEST);
 
-        $criteria = json_decode(urldecode($urlParams[2]), true);
-
-        if (is_array($criteria))
-            throw new Exception('criteria is invalid', Response::WARNING_TYPE_BAD_REQUEST);
-        else
-            $criteria = ['_id' => $criteria];
+        $criteria = (!empty($urlParams[2])) ? json_decode(urldecode($urlParams[2]), true) : $_GET;
 
         $params = json_decode(file_get_contents('php://input'), true);
 
@@ -58,15 +44,11 @@ switch ($method) {
         break;
     //DELETE
     case 'DELETE':
-        if (empty($urlParams[2]))
+        $params = json_decode(file_get_contents('php://input'), true);
+
+        if (empty($params))
             throw new Exception('params is missing', Response::WARNING_TYPE_BAD_REQUEST);
 
-        $params = json_decode(urldecode($urlParams[2]), true);
-
-        if (is_array($params))
-            throw new Exception('params is invalid', Response::WARNING_TYPE_BAD_REQUEST);
-
-        $params = ['_id' => $params];
         break;
 }
 $controller = 'App\\' . ucfirst($controller) . 'Controller';
