@@ -15,34 +15,7 @@ $username = readConsole('username: ');
 $password = readConsole('password: ');
 
 
-list($hash , $key) = configUser();
-
-$configIni = <<<EOT
-[system]
-debug = true
-
-[cors]
-allowed-methods = GET, POST, PUT, DELETE, OPTIONS
-allowed-headers = Content-Type, Accept, Origin
-
-[auth]
-hash = $hash
-key = $key
-
-[db]
-type = mysql
-
-[user]
-actions = login,logout
-requireAuth = logout
-EOT;
-
-if(file_exists('config'))
-    run('rm -rf config');
-
-run('mkdir config');
-
-file_put_contents('config/config.ini', $configIni);
+generateIni('mysql');
 
 changeDir('vendor');
 

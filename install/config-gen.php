@@ -10,6 +10,31 @@ function configUser(){
     return [password_hash("{$username}{$password}{$key}", PASSWORD_DEFAULT, ["cost" => 12]), $key];
 }
 
+function generateIni($dbType){
+    $configIni = <<<EOT
+[system]
+debug = true
+
+[cors]
+allowed-methods = GET, POST, PUT, DELETE, OPTIONS
+allowed-headers = Content-Type, Accept, Origin
+
+[db]
+type = $dbType
+
+[user]
+actions = login,logout
+requireAuth = logout
+EOT;
+
+    if(file_exists('config'))
+        run('rm -rf config');
+
+    run('mkdir config');
+
+    file_put_contents('config/config.ini', $configIni);
+}
+
 define('DB_TYPE', ['mysql', 'embedNoSQL', 'mongo']);
 
 $selectedDBType = generateMenu('SELECT DB TYPE', DB_TYPE);
