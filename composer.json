@@ -1,6 +1,6 @@
 {
-    "name": "jarivas/nap",
-    "description": "An extremly simple rest PHP framework",
+    "name": "jarivas\/nap",
+    "description": "An extremely simple rest PHP framework",
     "type": "project",
     "license": "MIT-3.0",
     "authors": [
@@ -10,5 +10,12 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "Nap\\": "nap\/core\/",
+            "App\\": "src\/",
+            "Entity\\": "nap\/Entity\/"
+        }
+    },
+    "version": "2.0.0"
 }
