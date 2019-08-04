@@ -22,9 +22,6 @@ allowed-headers = Content-Type, Accept, Origin
 [db]
 type = $dbType
 
-[user]
-actions = login,logout
-requireAuth = logout
 EOT;
 
     if(file_exists('config'))

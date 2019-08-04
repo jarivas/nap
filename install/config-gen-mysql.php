@@ -3,6 +3,8 @@ define('NO_ORM_URL', 'https://github.com/jarivas/no-orm/archive/1.0.zip');
 define('NO_ORM_FILE', 'no-orm.zip');
 define('NO_ORM_FOLDER', 'no-orm-1.0');
 
+generateIni('mysql');
+
 composerAddPSR('psr-4', ['Entity\\' => 'nap/Entity/']);
 
 composerInstall();
@@ -13,9 +15,6 @@ $host = readConsole('host: ');
 $dbName = readConsole('db name: ');
 $username = readConsole('username: ');
 $password = readConsole('password: ');
-
-
-generateIni('mysql');
 
 changeDir('vendor');
 
