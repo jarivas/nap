@@ -1,8 +1,8 @@
 <?php
 
 use Nap\Response;
-
-$urlParams = array_slice(explode('/', $_SERVER['REQUEST_URI']), 1);
+$urlParams = explode('?', $_SERVER['REQUEST_URI']);
+$urlParams = array_slice(explode('/', $urlParams[0]), 1);
 $controller = $urlParams[0];
 $action = $urlParams[1];
 $params = [];
@@ -26,21 +26,19 @@ switch ($method) {
         break;
     //READ
     case 'GET':
-        $params = (!empty($urlParams[2])) ? json_decode(urldecode($urlParams[2]), true) : $_GET;
+        $params = $_GET;
         break;
     //UPDATE
     case 'PUT':
-        if (empty($urlParams[2]) && !count($_GET))
+        if (!count($_GET))
             throw new Exception('criteria is missing', Response::WARNING_TYPE_BAD_REQUEST);
-
-        $criteria = (!empty($urlParams[2])) ? json_decode(urldecode($urlParams[2]), true) : $_GET;
 
         $params = json_decode(file_get_contents('php://input'), true);
 
         if (empty($params))
             throw new Exception('params is missing', Response::WARNING_TYPE_BAD_REQUEST);
 
-        $params = ['criteria' => $criteria, 'params' => $params];
+        $params = ['criteria' => $_GET, 'params' => $params];
         break;
     //DELETE
     case 'DELETE':
