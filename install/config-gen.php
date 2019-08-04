@@ -11,6 +11,10 @@ function configUser(){
 }
 
 function generateIni($dbType){
+    global $rootDir;
+
+    changeDir($rootDir);
+    
     $configIni = <<<EOT
 [system]
 debug = true
