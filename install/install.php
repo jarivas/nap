@@ -10,3 +10,5 @@ changeDir($rootDir);
 
 run('rm install.sh');
 run('rm -rf install');
+run('rm .gitignore');
+run('rm README.md');
