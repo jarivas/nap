@@ -13,5 +13,8 @@ require FUNCTIONS_DIR . 'errorHandler.php';
 require FUNCTIONS_DIR . 'requestValidation.php';
 
 //start
-$result = call_user_func_array([$controller, $action], [$params, $persistence]);
+if($persistence)
+    $result = call_user_func_array([$controller, $action], [$params, $persistence]);
+else
+    $result = call_user_func_array([$controller, $action], $params);
 Nap\Response::ok($result);

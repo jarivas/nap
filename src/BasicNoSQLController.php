@@ -3,12 +3,12 @@
 namespace App;
 
 use \Exception;
-use Nap\Controller;
+use Nap\NoSQLController;
 use Nap\Response;
 
-class BasicController {
-    use Controller;
-    
+class BasicNoSQLController {
+    use NoSQLController;
+
     public static function add(array $params, string $persistence): array {
         if(self::create($params, $persistence))
             return ['success' => true];

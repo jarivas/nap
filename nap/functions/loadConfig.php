@@ -19,7 +19,7 @@ if(file_exists($jsonFile)) {
     foreach($appConfig as $index => $config){
         if(isset($config['actions'])){
             $appConfig[$index]['actions'] = explode(',', $config['actions']);
-            
+
             if(isset($config['requireAuth']))
                 $appConfig[$index]['requireAuth'] = explode(',', $config['requireAuth']);
         }
