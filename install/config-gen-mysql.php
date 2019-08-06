@@ -1,7 +1,7 @@
 <?php
-define('NO_ORM_URL', 'https://github.com/jarivas/no-orm/archive/1.0.zip');
+define('NO_ORM_URL', 'https://github.com/jarivas/no-orm/archive/1.1.zip');
 define('NO_ORM_FILE', 'no-orm.zip');
-define('NO_ORM_FOLDER', 'no-orm-1.0');
+define('NO_ORM_FOLDER', 'no-orm-1.1');
 
 generateIni('mysql');
 
