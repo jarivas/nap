@@ -12,9 +12,8 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "Nap\\": "nap\/core\/",
-            "App\\": "src\/",
-            "Entity\\": "nap\/Entity\/"
+            "Nap\\": "nap/Core/",
+            "App\\": "src/"
         }
     },
     "version": "2.0.0"
