@@ -42,7 +42,7 @@ switch ($method) {
         break;
     //DELETE
     case 'DELETE':
-        $params = json_decode(file_get_contents('php://input'), true);
+        $params = (count($_GET)) ? $_GET : json_decode(file_get_contents('php://input'), true);
 
         if (empty($params))
             throw new Exception('params is missing', Response::WARNING_TYPE_BAD_REQUEST);
