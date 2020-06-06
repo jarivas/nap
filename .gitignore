@@ -9,10 +9,8 @@
 config/config.php
 config/config.json
 composer.lock
-nap/functions/checkAuth.php
 /nbproject/*
 nbproject/*
 data/*
 .idea/
-nap/Entity
 config
