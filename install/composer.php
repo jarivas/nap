@@ -36,7 +36,7 @@ function runComposerGlobal() {
 }
 
 function runComposerRequireGlobal($package) {
-    return run("composer install $package");
+    return run("composer require $package");
 }
 
 function composerInstall() {
