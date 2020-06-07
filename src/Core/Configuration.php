@@ -16,7 +16,10 @@ class Configuration
         $jsonFile = $dir . 'config.json';
 
         if(!file_exists($iniFile)){
-            Response::error('config file not present');
+            $msg = 'config file not present';
+
+            Logger::critical($msg);
+            Response::error($msg);
         }
 
         if(file_exists($jsonFile)) {

@@ -4,6 +4,8 @@
 namespace Core;
 
 
+use Core\Db\Persistence;
+
 class Request
 {
     private static $data;
@@ -11,55 +13,83 @@ class Request
     public static function init()
     {
         $body = file_get_contents('php://input');
+        $className = '';
+        $persistence = null;
+        $parameters = [];
 
         if (strlen($body) > 0) {
             $request = json_decode($body, true);
 
             if (!$request) {
                 Logger::info($body);
-                Response::warning(Response::WARNING_BAD_REQUEST, 'JSON not well formed');
+
+                self::sendWarning(Response::WARNING_BAD_REQUEST, 'JSON not well formed');
             }
 
             if (empty($request['module'])) {
-                Response::warning(Response::WARNING_BAD_REQUEST, 'Module is required');
+                self::sendWarning(Response::WARNING_BAD_REQUEST, 'Module is required');
             }
 
             if (empty($request['action'])) {
-                Response::warning(Response::WARNING_BAD_REQUEST, 'Action is required');
-            }
-
-            if (empty($request['parameters'])) {
-                $request['parameters'] = [];
+                self::sendWarning(Response::WARNING_BAD_REQUEST, 'Action is required');
             }
 
             self::$data = $request;
 
-            self::exeModuleAction();
+            $className = self::getModuleAction();
+
+            $parameters = self::getParameters();
+
+            $persistence = self::getPersistence();
+
+            Response::ok($className($parameters, $persistence));
         } else {
-            Response::warning(Response::WARNING_BAD_REQUEST, 'Empty body');
+            self::sendWarning(Response::WARNING_BAD_REQUEST, 'Empty body');
         }
     }
 
-    private static function exeModuleAction()
+    private static function sendWarning(int $type, string $msg)
+    {
+        Logger::warning($msg);
+        Response::warning($type, $msg);
+    }
+
+    private static function getModuleAction()
     {
         $module = self::$data['module'];
         $action = self::$data['action'];
 
         if (!Configuration::validateModuleAction($module, $action)) {
-            Response::warning(Response::WARNING_BAD_REQUEST, 'Wrong Module and/or Action');
+            self::sendWarning(Response::WARNING_BAD_REQUEST, 'Wrong Module and/or Action');
         }
 
         if (Configuration::shouldAuth($module, $action)) {
             if (!Authentication::isValid(self::$data['parameters'], getallheaders())) {
-                Response::warning(Response::WARNING_UNAUTHORIZED, 'Wrong login credentials');
+                self::sendWarning(Response::WARNING_UNAUTHORIZED, 'Wrong login credentials');
             }
         }
 
         $module = ucfirst($module);
         $action = ucfirst($action);
 
-        $module = "Modules\\$module\\$action::process";
+        return "Modules\\$module\\$action::process";
+    }
 
-        Response::ok($module(self::$data['parameters']));
+    private static function getParameters(): array
+    {
+        if (empty($request['parameters'])) {
+            return [];
+        }
+
+        return Sanitize::process(self::$data['module'], self::$data['action'], self::$data['parameters']);
+    }
+
+    private static function getPersistence(): Persistence
+    {
+        $db = Configuration::getData('db');
+
+        $className = "Core\\Db\\{$db['type']}::getInstance";
+
+        return $className($db);
     }
 }

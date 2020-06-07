@@ -27,14 +27,10 @@ class Response {
     }
 
     public static function error(string $message) {
-        Logger::error($message);
-
         self::helper(self::FATAL_INTERNAL_ERROR, json_encode(['message' => $message]));
     }
 
     public static function warning(int $warning_type, string $message) {
-        Logger::warning($message);
-
         self::helper($warning_type, json_encode(['message' => $message]));
     }
 

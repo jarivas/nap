@@ -4,9 +4,12 @@
 namespace Modules\Attendant;
 
 
-class Create
+use Core\Db\Persistence;
+use Modules\Action;
+
+class Create extends Action
 {
-    public static function process(array $params): array
+    public static function process(array $params, Persistence $persistence): array
     {
         return ['success' => true];
     }

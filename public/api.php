@@ -8,7 +8,6 @@ require SRC_DIR . 'autoload.php';
 use Core\Logger;
 use Core\Configuration;
 use Core\Response;
-use Core\Authentication;
 use Core\Request;
 
 if (!Logger::canLog()) {
@@ -18,6 +17,7 @@ if (!Logger::canLog()) {
 Logger::setRequestId(uniqid('', true));
 
 Configuration::init();
+require SRC_DIR . 'error_handler.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     $cors = Configuration::getData('cors');
@@ -30,7 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    Response::warning(Response::WARNING_METHOD_NOT_ALLOWED, 'Invalid method');
+    $msg = 'Invalid method';
+
+    Logger::warning($msg);
+    Response::warning(Response::WARNING_METHOD_NOT_ALLOWED, $msg);
 }
 
 Request::init();
