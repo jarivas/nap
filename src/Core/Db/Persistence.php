@@ -8,7 +8,7 @@ abstract class Persistence
 {
     const CRITERIA_EQUAL = '=';
 
-    private static $instance = null;
+    protected static $instance = null;
 
     public static function getInstance(array $db): self
     {
@@ -19,14 +19,14 @@ abstract class Persistence
         return static::$instance;
     }
 
-    private function __construct(array $db)
+    protected function __construct(array $db)
     {}
 
-    abstract public function create(array $item): bool;
+    abstract public function create(array $item, ?string $storeName = null): bool;
 
-    abstract public function read(array $criteria, array $options = []): array;
+    abstract public function read(array $criteria, array $options = [], ?string $storeName = null): array;
 
-    abstract public function update(array $criteria, array $item): bool;
+    abstract public function update(array $criteria, array $item, ?string $storeName = null): bool;
 
-    abstract public function delete(array $criteria): bool;
+    abstract public function delete(array $criteria, ?string $storeName = null): bool;
 }

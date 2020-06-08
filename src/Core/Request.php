@@ -34,11 +34,15 @@ class Request
                 self::sendWarning(Response::WARNING_BAD_REQUEST, 'Action is required');
             }
 
+            if (empty($request['parameters'])) {
+                $request['parameters'] = [];
+            }
+
             self::$data = $request;
 
             $className = self::getModuleAction();
 
-            $parameters = self::getParameters();
+            $parameters = Sanitize::process(self::$data['module'], self::$data['action'], self::$data['parameters']);
 
             $persistence = self::getPersistence();
 
@@ -73,15 +77,6 @@ class Request
         $action = ucfirst($action);
 
         return "Modules\\$module\\$action::process";
-    }
-
-    private static function getParameters(): array
-    {
-        if (empty($request['parameters'])) {
-            return [];
-        }
-
-        return Sanitize::process(self::$data['module'], self::$data['action'], self::$data['parameters']);
     }
 
     private static function getPersistence(): Persistence

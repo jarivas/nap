@@ -16,10 +16,11 @@ trait FileLogger
             $fileName = self::$logDir . $level . '.log';
             $microTime = explode(' ', microtime());
             $microTime = date('Y-m-d h:i:s.') . $microTime[1];
-            $message =  $microTime . ': [' . self::$requestId. '] ' . $message;
+            $message = PHP_EOL . $microTime . ': [' . self::$requestId. '] ' . $message;
+            $system = Configuration::getData('system');
 
-            if ($level === Logger::CRITICAL || $level === Logger::ERROR || $level === Logger::EMERGENCY) {
-                $message .= PHP_EOL . print_r(debug_backtrace(), 1);
+            if ($system['debug'] || $level === Logger::CRITICAL || $level === Logger::ERROR || $level === Logger::EMERGENCY) {
+                $message .= PHP_EOL . print_r(array_slice(debug_backtrace(), 2, 5), 1);
 ;            }
 
             $result = file_put_contents($fileName, $message, FILE_APPEND | LOCK_EX);

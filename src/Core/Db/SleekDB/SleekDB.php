@@ -23,7 +23,7 @@
     // Initialize the store.
     public static function store( $storeName = false, $dataDir, $options = false ) {
       if ( !$storeName OR empty( $storeName ) ) throw new \Exception( 'Store name was not valid' );
-      $_dbInstance = new \SleekDB\SleekDB( $dataDir, $options );
+      $_dbInstance = new self( $dataDir, $options );
       $_dbInstance->storeName = $storeName;
       // Boot store.
       $_dbInstance->bootStore();
