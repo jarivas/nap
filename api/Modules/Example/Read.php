@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Modules\Attendant;
+namespace Modules\Example;
 
 
 use Core\Db\Persistence;

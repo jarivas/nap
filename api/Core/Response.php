@@ -17,6 +17,14 @@ class Response {
     const WARNING_LOCKED = 423;
     const FATAL_INTERNAL_ERROR = 500;
 
+    protected static function helper(int $code, string $message){
+        header("Content-type: application/json; charset=utf-8");
+
+        http_response_code($code);
+
+        die($message);
+    }
+
     public static function ok($response) {
         self::helper(self::OK_DEFAULT, json_encode($response));
     }
@@ -32,13 +40,5 @@ class Response {
 
     public static function warning(int $warning_type, string $message) {
         self::helper($warning_type, json_encode(['message' => $message]));
-    }
-
-    protected static function helper(int $code, string $message){
-        header("Content-type: application/json; charset=utf-8");
-
-        http_response_code($code);
-
-        die($message);
     }
 }

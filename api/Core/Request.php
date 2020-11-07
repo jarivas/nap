@@ -14,42 +14,42 @@ class Request
     {
         $body = file_get_contents('php://input');
         $className = '';
-        $persistence = null;
+        $request = $persistence = null;
         $parameters = [];
 
-        if (strlen($body) > 0) {
-            $request = json_decode($body, true);
-
-            if (!$request) {
-                Logger::info($body);
-
-                self::sendWarning(Response::WARNING_BAD_REQUEST, 'JSON not well formed');
-            }
-
-            if (empty($request['module'])) {
-                self::sendWarning(Response::WARNING_BAD_REQUEST, 'Module is required');
-            }
-
-            if (empty($request['action'])) {
-                self::sendWarning(Response::WARNING_BAD_REQUEST, 'Action is required');
-            }
-
-            if (empty($request['parameters'])) {
-                $request['parameters'] = [];
-            }
-
-            self::$data = $request;
-
-            $className = self::getModuleAction();
-
-            $parameters = Sanitize::process(self::$data['module'], self::$data['action'], self::$data['parameters']);
-
-            $persistence = self::getPersistence();
-
-            Response::ok($className($parameters, $persistence));
-        } else {
+        if (!strlen($body) {
             self::sendWarning(Response::WARNING_BAD_REQUEST, 'Empty body');
         }
+
+        $request = json_decode($body, true);
+
+        if (!$request) {
+            Logger::info($body);
+
+            self::sendWarning(Response::WARNING_BAD_REQUEST, 'JSON not well formed');
+        }
+
+        if (empty($request['module'])) {
+            self::sendWarning(Response::WARNING_BAD_REQUEST, 'Module is required');
+        }
+
+        if (empty($request['action'])) {
+            self::sendWarning(Response::WARNING_BAD_REQUEST, 'Action is required');
+        }
+
+        if (empty($request['parameters'])) {
+            $request['parameters'] = [];
+        }
+
+        self::$data = $request;
+
+        $className = self::getModuleAction();
+
+        $parameters = Sanitize::process(self::$data['module'], self::$data['action'], self::$data['parameters']);
+
+        $persistence = self::getPersistence();
+
+        Response::ok($className($parameters, $persistence));
     }
 
     private static function sendWarning(int $type, string $msg)

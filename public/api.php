@@ -1,9 +1,9 @@
 <?php
 
 define('ROOT_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR);
-define('SRC_DIR', ROOT_DIR . 'src' . DIRECTORY_SEPARATOR);
+define('API_DIR', ROOT_DIR . 'api' . DIRECTORY_SEPARATOR);
 
-require SRC_DIR . 'autoload.php';
+require API_DIR . 'autoload.php';
 
 use Core\Logger;
 use Core\Configuration;
@@ -17,7 +17,8 @@ if (!Logger::canLog()) {
 Logger::setRequestId(uniqid('', true));
 
 Configuration::init();
-require SRC_DIR . 'error_handler.php';
+
+require API_DIR . 'error_handler.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     $cors = Configuration::getData('cors');
