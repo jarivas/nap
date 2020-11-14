@@ -14,13 +14,25 @@ class Request
     {
         $body = file_get_contents('php://input');
         $className = '';
-        $request = $persistence = null;
+        $persistence = null;
         $parameters = [];
 
-        if (!strlen($body) {
+        if (!strlen($body)) {
             self::sendWarning(Response::WARNING_BAD_REQUEST, 'Empty body');
         }
 
+        self::setRequestData($className);
+
+        $className = self::getModuleAction();
+
+        $parameters = Sanitize::process(self::$data['module'], self::$data['action'], self::$data['parameters']);
+
+        $persistence = self::getPersistence();
+
+        Response::ok($className($parameters, $persistence));
+    }
+    
+    private static function setRequestData(string $body) {
         $request = json_decode($body, true);
 
         if (!$request) {
@@ -40,16 +52,8 @@ class Request
         if (empty($request['parameters'])) {
             $request['parameters'] = [];
         }
-
-        self::$data = $request;
-
-        $className = self::getModuleAction();
-
-        $parameters = Sanitize::process(self::$data['module'], self::$data['action'], self::$data['parameters']);
-
-        $persistence = self::getPersistence();
-
-        Response::ok($className($parameters, $persistence));
+        
+        self::$data = &$request;        
     }
 
     private static function sendWarning(int $type, string $msg)
@@ -58,7 +62,7 @@ class Request
         Response::warning($type, $msg);
     }
 
-    private static function getModuleAction()
+    private static function getModuleAction() : string
     {
         $module = self::$data['module'];
         $action = self::$data['action'];

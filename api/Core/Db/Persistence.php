@@ -24,7 +24,9 @@ abstract class Persistence
 
     abstract public function create(array $item, ?string $storeName = null): bool;
 
-    abstract public function read(array $criteria, array $options = [], ?string $storeName = null): array;
+    abstract public function read(array $criteria, ?string $storeName = null, array $options = []): array;
+    
+    abstract public function readOne(array $criteria, ?string $storeName = null, array $options = []): array;
 
     abstract public function update(array $criteria, array $item, ?string $storeName = null): bool;
 

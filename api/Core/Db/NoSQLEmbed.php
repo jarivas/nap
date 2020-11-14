@@ -16,6 +16,8 @@ class NoSQLEmbed extends Persistence {
     ];
 
     protected function __construct(array $db) {
+        parent::__construct($db);
+        
         $this->path = ROOT_DIR . $db['data_folder'] . DIRECTORY_SEPARATOR . $db['name'];
 
         $this->dataset = [];
@@ -38,7 +40,7 @@ class NoSQLEmbed extends Persistence {
         return ($result) ? true : false;
     }
 
-    public function read(array $criteria, array $options = [], ?string $storeName = 'default'): array {
+    public function read(array $criteria, ?string $storeName = 'default', array $options = []): array {
         $store = $this->initDataset($storeName);
 
         foreach ($criteria as $fieldName => $value){
@@ -61,10 +63,10 @@ class NoSQLEmbed extends Persistence {
         return $store->fetch();
     }
 
-    public function readOne(array $criteria, array $options = [], ?string $storeName = 'default'): array{
+    public function readOne(array $criteria, ?string $storeName = 'default', array $options = []): array{
         $options['limit'] = 1;
 
-        $result = $this->read($criteria, $options, $storeName);
+        $result = $this->read($criteria, $storeName, $options);
 
         return (count($result) == 1) ? $result[0] : $result;
     }
