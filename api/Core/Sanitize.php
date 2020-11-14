@@ -1,15 +1,12 @@
 <?php
 
-
 namespace Core;
 
+class Sanitize {
 
-class Sanitize
-{
     const DATETIME_FORMAT = 'Y-m-d H:i:s';
 
-    public static function process(string $module, string $action, array $parameters): array
-    {
+    public static function process(string $module, string $action, array $parameters): array {
         $preKey = "{$module}_{$action}_";
         $rules = self::getRules($preKey);
         $parameterName = '';
@@ -32,8 +29,7 @@ class Sanitize
         return $parameters;
     }
 
-    protected static function getRules(string $preKey)
-    {
+    protected static function getRules(string $preKey) {
         $sanitize = Configuration::getData('sanitize');
         $result = [];
         $length = strlen($preKey);
@@ -48,8 +44,7 @@ class Sanitize
         return $result;
     }
 
-    private static function applyFilters(string $filters, string $parameterName, array &$parameters, array &$errors)
-    {
+    private static function applyFilters(string $filters, string $parameterName, array &$parameters, array &$errors) {
         $filtersError = [];
 
         if (empty($parameters[$parameterName])) {
@@ -69,8 +64,7 @@ class Sanitize
         }
     }
 
-    private static function applyFilter(string $filter, array &$filtersError, $value)
-    {
+    private static function applyFilter(string $filter, array &$filtersError, $value) {
         $pieces = explode('_', $filter);
 
         switch ($pieces[0]) {
@@ -115,11 +109,9 @@ class Sanitize
                 }
                 break;
         }
-
     }
 
-    private static function getErrorMsg(array &$error): string
-    {
+    private static function getErrorMsg(array &$error): string {
         $result = '';
 
         foreach ($error as $param => $errors) {
@@ -128,4 +120,5 @@ class Sanitize
 
         return $result;
     }
+
 }

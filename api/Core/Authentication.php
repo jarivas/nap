@@ -2,8 +2,6 @@
 
 namespace Core;
 
-
-class Authentication extends BaseAuthentication
-{
+class Authentication extends BaseAuthentication {
     
 }

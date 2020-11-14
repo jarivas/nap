@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Core\Db;
 
 use Core\Db\SleekDB\SleekDB;
-
 
 class NoSQLEmbed extends Persistence {
 
@@ -21,7 +19,7 @@ class NoSQLEmbed extends Persistence {
      */
     protected function __construct(array $db) {
         parent::__construct($db);
-        
+
         $this->path = ROOT_DIR . $db['data_folder'] . DIRECTORY_SEPARATOR . $db['name'];
 
         $this->dataset = [];
@@ -32,9 +30,8 @@ class NoSQLEmbed extends Persistence {
      * @param string|null $storeName aka table or Document
      * @return SleekDB
      */
-    private function initDataset(?string $storeName = 'default'): SleekDB
-    {
-        if(empty($this->dataset[$storeName])) {
+    private function initDataset(?string $storeName = 'default'): SleekDB {
+        if (empty($this->dataset[$storeName])) {
             $this->dataset[$storeName] = SleekDB::store($storeName, $this->path, $this->conf);
         }
 
@@ -64,17 +61,17 @@ class NoSQLEmbed extends Persistence {
      */
     public function read(array $criteria, ?string $storeName = 'default', array $options = []): ?array {
         $store = $this->initDataset($storeName);
-        $result = []; 
+        $result = [];
 
-        foreach ($criteria as $fieldName => $value){
+        foreach ($criteria as $fieldName => $value) {
             $store->where($fieldName, self::CRITERIA_EQUAL, $value);
         }
 
-        if (isset($options['limit']) && is_int($options['limit'])){
+        if (isset($options['limit']) && is_int($options['limit'])) {
             $store->limit($options['limit']);
         }
 
-        if (isset($options['skip']) && is_int($options['skip'])){
+        if (isset($options['skip']) && is_int($options['skip'])) {
             $store->skip($options['skip']);
         }
 
@@ -82,7 +79,7 @@ class NoSQLEmbed extends Persistence {
             $o = $options['orderBy'];
             $store->orderBy($o['order'], $o['field']);
         }
-        
+
         $result = $store->fetch();
 
         return count($result) ? $result : null;
@@ -95,7 +92,7 @@ class NoSQLEmbed extends Persistence {
      * @param array $options limit, skip, orderBy
      * @return array|null
      */
-    public function readOne(array $criteria, ?string $storeName = 'default', array $options = []): ?array{        
+    public function readOne(array $criteria, ?string $storeName = 'default', array $options = []): ?array {
         $options['limit'] = 1;
 
         return $this->read($criteria, $storeName, $options);
@@ -116,9 +113,8 @@ class NoSQLEmbed extends Persistence {
         return $store->update($item);
     }
 
-    private function setWhere(SleekDB $store, array &$criteria)
-    {
-        foreach ($criteria as $fieldName => $value){
+    private function setWhere(SleekDB $store, array &$criteria) {
+        foreach ($criteria as $fieldName => $value) {
             $store->where($fieldName, self::CRITERIA_EQUAL, $value);
         }
     }
