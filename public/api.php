@@ -11,16 +11,20 @@ use Core\Response;
 use Core\Request;
 
 if (!Logger::canLog()) {
-    Response::error('Fatal error on the server');
+    die('Fatal error on the server');
 }
 
 Logger::setRequestId(uniqid('', true));
 
-Configuration::init();
+list($error, $msg) = Configuration::init();
+
+if ($error) {
+    die($msg);
+}
 
 require API_DIR . 'error_handler.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+if (strtoupper($_SERVER['REQUEST_METHOD']) == 'OPTIONS') {
     $cors = Configuration::getData('cors');
 
     header("Access-Control-Allow-Origin: {$cors['allowed-origins']}");
@@ -30,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     Response::okEmpty(Response::OK_NO_CONTENT);
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+if (strtoupper($_SERVER['REQUEST_METHOD']) !== 'POST') {
     $msg = 'Invalid method';
 
     Logger::warning($msg);
@@ -38,3 +42,4 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 Request::init();
+

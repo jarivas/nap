@@ -15,6 +15,10 @@ class NoSQLEmbed extends Persistence {
         'timeout' => 5
     ];
 
+    /**
+     * 
+     * @param array $db the info contained in the configuration
+     */
     protected function __construct(array $db) {
         parent::__construct($db);
         
@@ -23,6 +27,11 @@ class NoSQLEmbed extends Persistence {
         $this->dataset = [];
     }
 
+    /**
+     * 
+     * @param string|null $storeName aka table or Document
+     * @return SleekDB
+     */
     private function initDataset(?string $storeName = 'default'): SleekDB
     {
         if(empty($this->dataset[$storeName])) {
@@ -32,6 +41,12 @@ class NoSQLEmbed extends Persistence {
         return $this->dataset[$storeName];
     }
 
+    /**
+     * 
+     * @param array $item subject to insert
+     * @param string|null $storeName aka table or Document
+     * @return bool
+     */
     public function create(array $item, ?string $storeName = 'default'): bool {
         $store = $this->initDataset($storeName);
 
@@ -40,8 +55,16 @@ class NoSQLEmbed extends Persistence {
         return ($result) ? true : false;
     }
 
-    public function read(array $criteria, ?string $storeName = 'default', array $options = []): array {
+    /**
+     * 
+     * @param array $criteria to filter query results (where)
+     * @param string|null $storeName aka table or Document
+     * @param array $options limit, skip, orderBy
+     * @return array|null
+     */
+    public function read(array $criteria, ?string $storeName = 'default', array $options = []): ?array {
         $store = $this->initDataset($storeName);
+        $result = []; 
 
         foreach ($criteria as $fieldName => $value){
             $store->where($fieldName, self::CRITERIA_EQUAL, $value);
@@ -59,22 +82,36 @@ class NoSQLEmbed extends Persistence {
             $o = $options['orderBy'];
             $store->orderBy($o['order'], $o['field']);
         }
+        
+        $result = $store->fetch();
 
-        return $store->fetch();
+        return count($result) ? $result : null;
     }
 
-    public function readOne(array $criteria, ?string $storeName = 'default', array $options = []): array{
+    /**
+     * 
+     * @param array $criteria to filter query results (where)
+     * @param string|null $storeName aka table or Document
+     * @param array $options limit, skip, orderBy
+     * @return array|null
+     */
+    public function readOne(array $criteria, ?string $storeName = 'default', array $options = []): ?array{        
         $options['limit'] = 1;
 
-        $result = $this->read($criteria, $storeName, $options);
-
-        return (count($result) == 1) ? $result[0] : $result;
+        return $this->read($criteria, $storeName, $options);
     }
 
+    /**
+     * 
+     * @param array $criteria to filter query results (where)
+     * @param array $item subject to update
+     * @param string|null $storeName aka table or Document
+     * @return bool
+     */
     public function update(array $criteria, array $item, ?string $storeName = 'default'): bool {
         $store = $this->initDataset($storeName);
 
-        $this->setWhere($store, $criteria);
+        $this->setWhere($store, &$criteria);
 
         return $store->update($item);
     }
@@ -86,6 +123,12 @@ class NoSQLEmbed extends Persistence {
         }
     }
 
+    /**
+     * 
+     * @param array $criteria to filter query results (where)
+     * @param string|null $storeName
+     * @return bool
+     */
     public function delete(array $criteria, ?string $storeName = 'default'): bool {
         $store = $this->initDataset($storeName);
 

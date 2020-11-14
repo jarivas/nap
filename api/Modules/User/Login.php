@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Modules\Auth;
+namespace Modules\User;
 
 
 use Core\Db\Persistence;
@@ -18,6 +18,7 @@ class Login extends Action
         $user = $persistence->readOne($criteria, self::USER_STORE);
         
         if(password_verify($params['username'].$params['password'], $user['hash'])) {
+            
             $user = array_merge($user, [
                 'token' => uniqid('', true),
                 'ip' => $_SERVER['REMOTE_ADDR'] ?? 'no-ip',

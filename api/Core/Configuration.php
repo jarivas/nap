@@ -1,79 +1,100 @@
 <?php
 
-
 namespace Core;
 
+class Configuration {
 
-class Configuration
-{
     private static $data;
     private static $modules;
 
-    public static function init()
-    {
+    public static function init(): array {
+
         $dir = ROOT_DIR . 'config' . DIRECTORY_SEPARATOR;
         $iniFile = $dir . 'config.ini';
         $jsonFile = $dir . 'config.json';
 
-        if(!file_exists($iniFile)){
-            $msg = 'config file not present';
-
-            Logger::critical($msg);
-            Response::error($msg);
+        if (!file_exists($iniFile)) {
+            
+            return [false, 'config file not present'];
         }
 
-        if(file_exists($jsonFile)) {
-            self::$data = json_decode(file_get_contents($jsonFile), true);
-        } else {
-            self::$data = parse_ini_file($iniFile, true, INI_SCANNER_TYPED);
+        if (file_exists($jsonFile)) {
 
-            file_put_contents($jsonFile, json_encode(self::$data));
-        }
+            list(self::$data, self::$modules) = json_decode(file_get_contents($jsonFile), true);
 
-        self::processModules();
-        self::processAuthorization();
-    }
-
-    private static function processModules()
-    {
-        self::$modules = [];
-
-        foreach (self::$data['modules'] as $module => $actions) {
-            foreach (explode(',', $actions) as $action) {
-
-                if (empty(self::$modules[$module])) {
-                    self::$modules[$module] = [$action => false];
-                } else {
-                    self::$modules[$module][$action] = false;
-                }
+            if ( (self::$data && count(self::$data)) && (self::$modules && count(self::$modules))){
+                return [true, ''];
             }
         }
+
+        return processIniConfig($iniFile, $jsonFile);
     }
 
-    private static function processAuthorization()
-    {
-        foreach (self::$data['authorization'] as $module => $actions) {
-            foreach (explode(',', $actions) as $action) {
+    protected static function processIniConfig(string $iniFile, string $jsonFile): array {
+        
+        $appConfig = parse_ini_file($iniFile, true, INI_SCANNER_TYPED);
 
-                if (isset(self::$modules[$module][$action])) {
-                    self::$modules[$module][$action] = true;
-                }
-            }
+        if (!$appConfig || !count($appConfig)) {
+            
+            return [false, 'malformed config file'];
         }
+
+        foreach ($appConfig as $index => $config) {
+            
+            if (empty($config['actions'])) {
+                
+                self::$data[$index] = $config;
+            } else {
+                
+                self::$modules[$index] = self::processIniModule(&$config);
+            }
+
+        }
+
+        if (!file_put_contents($jsonFile, json_encode([self::$data, self::$modules]))) {
+            
+            return [false, 'Error saving config.json'];
+        }
+
+        return [true, ''];
     }
 
-    public static function getData($key)
-    {
+    protected static function processIniModule(array &$config): array {
+        $module = [
+            'actions' => explode(',', $config['actions'])
+        ];
+
+        if (isset($config['requireAuth'])) {
+            
+            $module['requireAuth'] = explode(',', $config['requireAuth']);
+        }
+
+        if (isset($config['cli'])) {
+            
+            $module['cli'] = explode(',', $config['cli']);
+        }
+        
+        return $module;
+    }
+
+    public static function getData($key) {
+        
         return self::$data[$key];
     }
 
-    public static function validateModuleAction(string $module, string $action): bool
-    {
-        return empty(self::$modules[$module][$action]);
+    public static function validateModuleAction(string $module, string $action): bool {
+        
+        return isset(self::$modules[$module]['actions'][$action]);
     }
 
-    public static function shouldAuth(string $module, string $action) : bool
-    {
-        return isset(self::$modules[$module][$action]) ?? self::$modules[$module][$action];
+    public static function shouldAuth(string $module, string $action): bool {
+        
+        return isset(self::$modules[$module]['requireAuth'][$action]);
     }
+
+    public static function isCli(string $module, string $action): bool {
+        
+        return isset(self::$modules[$module]['cli'][$action]);
+    }
+
 }
