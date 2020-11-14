@@ -6,7 +6,7 @@ class Sanitize {
 
     const DATETIME_FORMAT = 'Y-m-d H:i:s';
 
-    public static function process(string $module, string $action, array $parameters): array {
+    public static function process(string $module, string $action, array &$parameters): array {
         $preKey = "{$module}_{$action}_";
         $rules = self::getRules($preKey);
         $parameterName = '';
@@ -22,11 +22,10 @@ class Sanitize {
         if (count($errors)) {
             $msg = self::getErrorMsg($errors);
 
-            Logger::warning($msg);
-            Response::warning(Response::WARNING_BAD_REQUEST, $msg);
+            return [false, $msg];
         }
 
-        return $parameters;
+        return [true, ""];
     }
 
     protected static function getRules(string $preKey) {
@@ -52,7 +51,7 @@ class Sanitize {
                 $filtersError[] = 'Required';
             }
         } else {
-            $value = &$parameters[$parameterName];
+            $value = $parameters[$parameterName];
 
             foreach (explode('|', $filters) as $filter) {
                 self::applyFilter($filter, $filtersError, $value);

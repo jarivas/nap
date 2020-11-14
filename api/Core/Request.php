@@ -8,19 +8,9 @@ class Request {
 
     private static $data;
 
-    public static function getPersistence(): Persistence {
-        $db = Configuration::getData('db');
-
-        $className = "Core\\Db\\{$db['type']}::getInstance";
-
-        return $className($db);
-    }
-
     public static function init() {
         $body = file_get_contents('php://input');
         $className = '';
-        $persistence = null;
-        $parameters = [];
 
         if (!strlen($body)) {
 
@@ -31,11 +21,7 @@ class Request {
 
         $className = self::getModuleAction();
 
-        $parameters = Sanitize::process(self::$data['module'], self::$data['action'], self::$data['parameters']);
-
-        $persistence = self::getPersistence();
-
-        Response::ok($className($parameters, $persistence));
+        Response::ok($className(self::getParameters(), self::getPersistence()));
     }
 
     private static function setRequestData(string &$body) {
@@ -89,6 +75,27 @@ class Request {
         $action = ucfirst($action);
 
         return "Modules\\$module\\$action::process";
+    }
+
+    private static function getParameters(): array {
+        $result = self::$data['parameters'];
+
+        list($error, $msg) = Sanitize::process(self::$data['module'], self::$data['action'], $result);
+
+        if ($error) {
+            Logger::warning($msg);
+            Response::warning(Response::WARNING_BAD_REQUEST, $msg);
+        }
+
+        return $result;
+    }
+
+    public static function getPersistence(): Persistence {
+        $db = Configuration::getData('db');
+
+        $className = "Core\\Db\\{$db['type']}::getInstance";
+
+        return $className($db);
     }
 
     private static function sendWarning(int $type, string $msg) {
