@@ -17,7 +17,7 @@ class Request {
             self::sendWarning(Response::WARNING_BAD_REQUEST, 'Empty body');
         }
 
-        self::setRequestData(&$body);
+        self::setRequestData($body);
 
         $className = self::getModuleAction();
 

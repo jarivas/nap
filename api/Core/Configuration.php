@@ -27,7 +27,7 @@ class Configuration {
             }
         }
 
-        return processIniConfig($iniFile, $jsonFile);
+        return self::processIniConfig($iniFile, $jsonFile);
     }
 
     protected static function processIniConfig(string $iniFile, string $jsonFile): array {
@@ -46,7 +46,7 @@ class Configuration {
                 self::$data[$index] = $config;
             } else {
 
-                self::$modules[$index] = self::processIniModule(&$config);
+                self::$modules[$index] = self::processIniModule($config);
             }
         }
 
@@ -83,17 +83,17 @@ class Configuration {
 
     public static function validateModuleAction(string $module, string $action): bool {
 
-        return isset(self::$modules[$module]['actions'][$action]);
+        return in_array($action, self::$modules[$module]['actions']);
     }
 
     public static function shouldAuth(string $module, string $action): bool {
 
-        return isset(self::$modules[$module]['auth'][$action]);
+        return in_array($action, self::$modules[$module]['auth']);
     }
 
     public static function isCli(string $module, string $action): bool {
 
-        return isset(self::$modules[$module]['cli'][$action]);
+        return in_array($action, self::$modules[$module]['cli']);
     }
 
 }

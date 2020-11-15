@@ -11,29 +11,30 @@ require API_DIR . 'autoload.php';
 
 use Core\Configuration;
 use Core\Request;
+use Core\Sanitize;
 
 /* START */
 
 if (!$argc) {
 
-    die('No json passed');
+    die('No json passed'. PHP_EOL);
 }
-
-$body = $argv[0];
+$body = $argv[1];
 
 if (!strlen($body)) {
 
-    die('Empty body');
+    die('Empty body'. PHP_EOL);
 }
 
-$request = getRequestData(&$body);
+$request = getRequestData($body);
 
-$className = getModuleAction(&$request);
+Configuration::init();
 
-$arrayResult = $className(getParameters(&$request), Request::getPersistence());
+$className = getModuleAction($request);
 
-die(print_r($arrayResult, 1));
+$result = $className(getParameters($request), Request::getPersistence());
 
+exit(json_encode($result));
 /* END */
 
 /* FUNCTIONS */
@@ -49,17 +50,17 @@ function getRequestData(string &$body): array {
 
     if (!$request) {
 
-        die('JSON not well formed');
+        die('JSON not well formed'. PHP_EOL);
     }
 
     if (empty($request['module'])) {
 
-        die('Module is required');
+        die('Module is required'. PHP_EOL);
     }
 
     if (empty($request['action'])) {
 
-        die('Action is required');
+        die('Action is required'. PHP_EOL);
     }
 
     if (empty($request['parameters'])) {
@@ -81,11 +82,11 @@ function getModuleAction(array &$request): string {
     $action = $request['action'];
 
     if (!Configuration::validateModuleAction($module, $action)) {
-        die('Wrong Module and/or Action');
+        die("Wrong Module and/or Action $module::$action" . PHP_EOL);
     }
 
     if (!Configuration::isCli($module, $action)) {
-        die('This action can not be executed from console');
+        die('This action can not be executed from console' . PHP_EOL);
     }
 
     $module = ucfirst($module);
@@ -102,9 +103,9 @@ function getModuleAction(array &$request): string {
 function getParameters(array &$request): array {
     $result = $request['parameters'];
 
-    list($error, $msg) = Sanitize::process($request['module'], $request['action'], $result);
+    list($ok, $msg) = Sanitize::process($request['module'], $request['action'], $result);
 
-    if ($error) {
+    if (!$ok) {
         die($msg);
     }
 
