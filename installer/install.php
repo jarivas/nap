@@ -1,8 +1,67 @@
 <?php
 
-/*
- * create data folder
- * replace %datadir%  on config.ini.example
- * create config.ini
- * create user
- */
+define('ROOT_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR);
+define('DATA_DIR', ROOT_DIR . 'data' . DIRECTORY_SEPARATOR);
+define('CONFIG_DIR', ROOT_DIR . 'config' . DIRECTORY_SEPARATOR);
+
+require 'basic.php';
+
+/* START */
+
+procesDataFolder();
+
+procesConfig();
+
+createRequest();
+
+/* END */
+
+/* FUNCTIONS */
+
+function procesDataFolder() {
+    if (!file_exists(DATA_DIR)) {
+        run('mkdir -p ' . DATA_DIR);
+    }    
+}
+
+function procesConfig() {
+    $iniFile = ROOT_DIR . "/config/config.ini";   
+    $iniContent = file_get_contents("{$iniFile}.example");
+    $iniContent = str_replace('%datadir%', DATA_DIR, $iniContent);
+
+    file_put_contents($iniFile, $iniContent);
+}
+
+function readUser() {
+    $user = readConsole('Enter user name: ');
+    $pwd = readConsole('Enter user password: ');
+    $pwd2 = readConsole('repeat password: ');
+
+    if ($pwd == $pwd2)
+        return [$user, $pwd];
+    else
+        return readUser();
+}
+
+function createRequest() {
+    list($username, $pwd) = readUser();
+
+    $user = [
+        'username' => $username,
+        'password' => password_hash($pwd, PASSWORD_DEFAULT),
+        'external_id' => uniqid()
+    ];
+    
+    $request = json_encode([
+        'module' => 'user',
+        'action' => 'create',
+        'parameters' => $user
+    ]);
+    
+    $result = run("php ../public/cli.php '$request'");
+    
+    var_dump($result);
+    die;
+}
+
+/* END FUNCTIONS */
