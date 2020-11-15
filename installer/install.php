@@ -49,8 +49,7 @@ function createRequest() {
 
     $user = [
         'username' => $username,
-        'password' => password_hash($pwd, PASSWORD_DEFAULT),
-        'external_id' => uniqid()
+        'password' => password_hash($pwd, PASSWORD_DEFAULT)
     ];
     
     $request = json_encode([

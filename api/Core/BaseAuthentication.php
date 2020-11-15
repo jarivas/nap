@@ -6,7 +6,7 @@ use Core\Db\Persistence;
 
 class BaseAuthentication {
 
-    const USER_STORE = 'user';
+    const DATA_STORE = 'user';
 
     public static function isValid(array $params, Persistence $persistence): bool {
         if (empty($params['token'])) {
@@ -15,7 +15,7 @@ class BaseAuthentication {
 
         $criteria = ['token' => $params['token']];
 
-        $item = $persistence->readOne($criteria, self::USER_STORE);
+        $item = $persistence->readOne($criteria, self::DATA_STORE);
 
         return ($item) ? true : false;
     }

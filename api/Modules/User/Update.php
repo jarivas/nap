@@ -7,7 +7,7 @@ use Modules\Action;
 
 class Update extends Action {
 
-    const USER_STORE = 'user';
+    const DATA_STORE = 'user';
 
     public static function process(array $params, Persistence $persistence): array {
         

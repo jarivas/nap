@@ -7,12 +7,12 @@ use Modules\Action;
 
 class Login extends Action {
 
-    const USER_STORE = 'user';
+    const DATA_STORE = 'user';
 
     public static function process(array $params, Persistence $persistence): array {
         $criteria = ['username' => $params['username']];
 
-        $user = $persistence->readOne($criteria, self::USER_STORE);
+        $user = $persistence->readOne($criteria, self::DATA_STORE);
 
         if (password_verify($params['password'], $user['password'])) {
 
@@ -23,7 +23,7 @@ class Login extends Action {
                 'expire' => (new \DateTime())->add(new \DateInterval('P0DT1H'))->getTimestamp()
             ]);
 
-            $persistence->update($criteria, $user, self::USER_STORE);
+            $persistence->update($criteria, $user, self::DATA_STORE);
 
             return ['success' => true, 'token' => $user['token']];
         }

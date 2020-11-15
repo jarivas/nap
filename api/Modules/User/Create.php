@@ -7,7 +7,7 @@ use Modules\Action;
 
 class Create extends Action {
 
-    const USER_STORE = 'user';
+    const DATA_STORE = 'user';
     
     /**
      *
@@ -22,7 +22,7 @@ class Create extends Action {
             return ["success" => false, 'msg' => "User already exists"];
         }
         
-        if($persistence->create($params, self::USER_STORE)){
+        if($persistence->create($params, self::DATA_STORE)){
             return ["success" => true];
         }
         
@@ -30,7 +30,7 @@ class Create extends Action {
     }
     
     protected static function existUsername(string $username): bool {
-        $result = self::$persistence->readOne(['username' => $username], self::USER_STORE);
+        $result = self::$persistence->readOne(['username' => $username], self::DATA_STORE);
         
         return ($result && is_array($result));
     }
