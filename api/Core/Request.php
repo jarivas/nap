@@ -6,7 +6,17 @@ use Core\Db\Persistence;
 
 class Request {
 
+    /**
+     *
+     * @var array
+     */
     private static $data;
+    
+    /**
+     *
+     * @var Persistence
+     */
+    private static $persistence;
 
     public static function init() {
         $body = file_get_contents('php://input');
@@ -18,10 +28,12 @@ class Request {
         }
 
         self::setRequestData($body);
+        
+        self::$persistence = self::getPersistence();
 
         $className = self::getModuleAction();
 
-        Response::ok($className(self::getParameters(), self::getPersistence()));
+        Response::ok($className(self::getParameters(), self::$persistence));
     }
 
     private static function setRequestData(string &$body) {
@@ -65,7 +77,7 @@ class Request {
 
         if (Configuration::shouldAuth($module, $action)) {
 
-            if (!Authentication::isValid(self::$data['parameters'], getallheaders())) {
+            if (!Authentication::isValid(self::$data['parameters'], self::$persistence)) {
 
                 self::sendWarning(Response::WARNING_UNAUTHORIZED, 'Wrong login credentials');
             }
@@ -80,9 +92,9 @@ class Request {
     private static function getParameters(): array {
         $result = self::$data['parameters'];
 
-        list($error, $msg) = Sanitize::process(self::$data['module'], self::$data['action'], $result);
+        list($ok, $msg) = Sanitize::process(self::$data['module'], self::$data['action'], $result);
 
-        if ($error) {
+        if (!$ok) {
             Logger::warning($msg);
             Response::warning(Response::WARNING_BAD_REQUEST, $msg);
         }

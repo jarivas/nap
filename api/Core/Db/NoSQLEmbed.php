@@ -115,6 +115,11 @@ class NoSQLEmbed extends Persistence {
         return $store->update($item);
     }
 
+    /**
+     * 
+     * @param SleekDB $store
+     * @param array $criteria
+     */
     private function setWhere(SleekDB $store, array &$criteria) {
         foreach ($criteria as $fieldName => $value) {
             $store->where($fieldName, self::CRITERIA_EQUAL, $value);

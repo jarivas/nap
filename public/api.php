@@ -16,9 +16,9 @@ if (!Logger::canLog()) {
 
 Logger::setRequestId(uniqid('', true));
 
-list($error, $msg) = Configuration::init();
+list($ok, $msg) = Configuration::init();
 
-if ($error) {
+if (!$ok) {
     die($msg);
 }
 

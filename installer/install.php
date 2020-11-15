@@ -21,6 +21,7 @@ createRequest();
 function procesDataFolder() {
     if (!file_exists(DATA_DIR)) {
         run('mkdir -p ' . DATA_DIR);
+        run('chmod -R 777' . DATA_DIR);
     }    
 }
 

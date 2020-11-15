@@ -14,13 +14,13 @@ class Login extends Action {
 
         $user = $persistence->readOne($criteria, self::USER_STORE);
 
-        if (password_verify($params['username'] . $params['password'], $user['hash'])) {
+        if (password_verify($params['password'], $user['password'])) {
 
             $user = array_merge($user, [
                 'token' => uniqid('', true),
                 'ip' => $_SERVER['REMOTE_ADDR'] ?? 'no-ip',
                 'proxy' => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? 'no-proxy',
-                'expire' => (new DateTime())->add(new DateInterval('P0DT1H'))->getTimestamp()
+                'expire' => (new \DateTime())->add(new \DateInterval('P0DT1H'))->getTimestamp()
             ]);
 
             $persistence->update($criteria, $user, self::USER_STORE);

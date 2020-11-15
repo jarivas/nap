@@ -12,12 +12,15 @@ class Logout extends Action {
     public static function process(array $params, Persistence $persistence): array {
         $criteria = ['token' => $params['token']];
 
-        $user = $persistence->readOne($criteria, self::USER_STORE);
+        $item = $persistence->readOne($criteria, self::USER_STORE);
+        
+        if ($item) {
+            $item['token'] = null;
+            $item['ip'] = null;
+            $item['proxy'] = null;
+            $item['expire'] = null;
 
-        if ($user) {
-            unset($user['token']);
-
-            return ['success' => $persistence->update($criteria, $user, self::USER_STORE)];
+            return ['success' => $persistence->update($criteria, $item, self::USER_STORE)];
         }
 
         return ['success' => false];

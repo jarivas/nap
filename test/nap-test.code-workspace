@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"rest-client.environmentVariables": {
+			"$shared": {
+			},
+			"local": {
+				"username": "jose",
+				"password": "asd"
+			}
+		}
+	}
+}

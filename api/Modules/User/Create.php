@@ -9,6 +9,10 @@ class Create extends Action {
 
     const USER_STORE = 'user';
     
+    /**
+     *
+     * @var Persistence 
+     */
     private static $persistence;
 
     public static function process(array $params, Persistence $persistence): array {
@@ -25,7 +29,7 @@ class Create extends Action {
         return ["success" => false, 'msg' => "Error on saving"];
     }
     
-    protected static function existUsername($username): bool {
+    protected static function existUsername(string $username): bool {
         $result = self::$persistence->readOne(['username' => $username], self::USER_STORE);
         
         return ($result && is_array($result));
