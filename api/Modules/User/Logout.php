@@ -10,9 +10,8 @@ class Logout extends Action {
     const DATA_STORE = 'user';
 
     public static function process(array $params, Persistence $persistence): array {
-        $criteria = ['token' => $params['token']];
 
-        $item = $persistence->readOne($criteria, self::DATA_STORE);
+        $item = self::getUser($params, $persistence);
         
         if ($item) {
             $item['token'] = null;
@@ -20,7 +19,7 @@ class Logout extends Action {
             $item['proxy'] = null;
             $item['expire'] = null;
 
-            return ['success' => $persistence->update($criteria, $item, self::DATA_STORE)];
+            return ['success' => $persistence->update([''], $item, self::DATA_STORE)];
         }
 
         return ['success' => false];
