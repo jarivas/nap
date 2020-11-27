@@ -2,9 +2,10 @@
 
 namespace Core;
 
+
 class Logger {
 
-    use FileLogger;
+    use Api\FileLogger;
 
     const EMERGENCY = 'emergency';
     const ALERT = 'alert';

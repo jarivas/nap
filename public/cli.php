@@ -5,9 +5,10 @@ if (php_sapi_name() !== 'cli') {
 }
 
 define('ROOT_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR);
-define('API_DIR', ROOT_DIR . 'api' . DIRECTORY_SEPARATOR);
+define('CORE_DIR', ROOT_DIR . 'Core' . DIRECTORY_SEPARATOR);
+define('API_DIR', ROOT_DIR . 'Api' . DIRECTORY_SEPARATOR);
 
-require API_DIR . 'autoload.php';
+require CORE_DIR .'autoload.php';
 
 use Core\Configuration;
 use Core\Request;

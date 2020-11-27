@@ -3,6 +3,7 @@
 namespace Core;
 
 use Core\Db\Persistence;
+use Api\Authentication;
 
 class Request {
 

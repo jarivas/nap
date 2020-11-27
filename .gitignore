@@ -13,6 +13,5 @@ composer.lock
 nbproject/*
 data/*
 .idea/
-config
 NoSQLData/
 .ini

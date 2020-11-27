@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\User;
+namespace Api\Modules\User;
 
 use Core\Db\Persistence;
 use Modules\Action;

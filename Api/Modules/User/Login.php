@@ -1,19 +1,17 @@
 <?php
 
-namespace Modules\User;
+namespace Api\Modules\User;
 
 use Core\Db\Persistence;
 use Modules\Action;
 
 class Login extends Action {
 
-    const DATA_STORE = 'user';
-
     public static function process(array $params, Persistence $persistence): array {
-        $criteria = ['username' => $params['username']];
-
-        $user = $persistence->readOne($criteria, self::DATA_STORE);
-
+        $user = self::getCurrentUser();
+        
+        $criteria = ['user_id' => $user['_id']];
+        
         if (password_verify($params['password'], $user['password'])) {
 
             $user = array_merge($user, [
@@ -23,9 +21,10 @@ class Login extends Action {
                 'expire' => (new \DateTime())->add(new \DateInterval('P0DT1H'))->getTimestamp()
             ]);
 
-            $persistence->update($criteria, $user, self::DATA_STORE);
-
-            return ['success' => true, 'token' => $user['token']];
+            if ($persistence->update($criteria, $user, self::DATA_STORE)) {
+                return ['success' => true, 'token' => $user['token']];
+            }
+            
         }
 
         return ['success' => false];

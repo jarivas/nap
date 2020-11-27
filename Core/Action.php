@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules;
+namespace Core;
 
 use Core\Db\Persistence;
 use Core\Db\NoSQLEmbed;
@@ -12,10 +12,8 @@ abstract class Action {
     
     abstract public static function process(array $params, Persistence $persistence): array;
     
-    protected static function getUser(array $params, Persistence $persistence): ?array {
-        $criteria = ['token' => $params['token']];
-
-        return $persistence->readOne($criteria, self::USER_STORE);
+    protected static function getCurrentUser(): array {
+        return $GLOBALS['user'];
     }
 
 

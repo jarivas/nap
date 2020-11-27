@@ -16,6 +16,8 @@ class BaseAuthentication {
         $criteria = ['token' => $params['token']];
 
         $item = $persistence->readOne($criteria, self::DATA_STORE);
+        
+        $GLOBALS['user'] = $item;
 
         return ($item) ? true : false;
     }

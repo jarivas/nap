@@ -21,16 +21,22 @@ createRequest();
 function procesDataFolder() {
     if (!file_exists(DATA_DIR)) {
         run('mkdir -p ' . DATA_DIR);
-        run('chmod -R 777' . DATA_DIR);
+        run('chmod -R 777 ' . DATA_DIR);
     }    
 }
 
 function procesConfig() {
-    $iniFile = ROOT_DIR . "/config/config.ini";   
+    $iniFile = ROOT_DIR . "config/config.ini";
     $iniContent = file_get_contents("{$iniFile}.example");
     $iniContent = str_replace('%datadir%', DATA_DIR, $iniContent);
+    
+    if (!file_exists($iniContent)) {
+        die("Example config file not present");
+    }
 
-    file_put_contents($iniFile, $iniContent);
+    if (!file_put_contents($iniFile, $iniContent)) {
+        die("Error creating config file");
+    }
 }
 
 function readUser() {

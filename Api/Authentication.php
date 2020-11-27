@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Api;
 
 class Authentication extends BaseAuthentication {
     
