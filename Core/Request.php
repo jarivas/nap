@@ -21,7 +21,8 @@ class Request {
 
     public static function init() {
         $body = file_get_contents('php://input');
-        $className = '';
+        $callable = '';
+        $parameters = [];
 
         if (!strlen($body)) {
 
@@ -29,12 +30,18 @@ class Request {
         }
 
         self::setRequestData($body);
+
+        $callable = self::getModuleAction();
         
-        self::$persistence = self::getPersistence();
+        $parameters = self::getParameters();
+        
+        // here middleware that modifies modifies parameters
+        
+        $response = $callable($parameters, self::getPersistence());
+        
+        // here middleware that modifies response
 
-        $className = self::getModuleAction();
-
-        Response::ok($className(self::getParameters(), self::$persistence));
+        Response::ok($response);
     }
 
     private static function setRequestData(string &$body) {
@@ -87,7 +94,7 @@ class Request {
         $module = ucfirst($module);
         $action = ucfirst($action);
 
-        return "Modules\\$module\\$action::process";
+        return "Api\\Modules\\$module\\$action::process";
     }
 
     private static function getParameters(): array {
@@ -103,12 +110,26 @@ class Request {
         return $result;
     }
 
+    /**
+     * 
+     * @return Persistence
+     */
     public static function getPersistence(): Persistence {
+        if (self::$persistence) {
+            return self::$persistence;
+        }
+        
         $db = Configuration::getData('db');
+        $dbType = $db['type'];
+        $callable = '';
+        
+        switch ($dbType) {
+            case 'sleek':
+                $callable = "Core\\Db\\NoSQLEmbed::getInstance";
+                break;
+        }
 
-        $className = "Core\\Db\\{$db['type']}::getInstance";
-
-        return $className($db);
+        return self::$persistence = $callable(Configuration::getData($dbType));
     }
 
     private static function sendWarning(int $type, string $msg) {

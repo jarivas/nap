@@ -6,7 +6,6 @@ if (php_sapi_name() !== 'cli') {
 
 define('ROOT_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR);
 define('CORE_DIR', ROOT_DIR . 'Core' . DIRECTORY_SEPARATOR);
-define('API_DIR', ROOT_DIR . 'Api' . DIRECTORY_SEPARATOR);
 
 require CORE_DIR .'autoload.php';
 
@@ -82,10 +81,6 @@ function getModuleAction(array &$request): string {
     $module = $request['module'];
     $action = $request['action'];
 
-    if (!Configuration::validateModuleAction($module, $action)) {
-        die("Wrong Module and/or Action $module::$action" . PHP_EOL);
-    }
-
     if (!Configuration::isCli($module, $action)) {
         die('This action can not be executed from console' . PHP_EOL);
     }
@@ -93,7 +88,7 @@ function getModuleAction(array &$request): string {
     $module = ucfirst($module);
     $action = ucfirst($action);
 
-    return "Modules\\$module\\$action::process";
+    return "Api\\Modules\\$module\\$action::process";
 }
 
 /**

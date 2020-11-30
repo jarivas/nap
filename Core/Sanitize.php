@@ -6,6 +6,13 @@ class Sanitize {
 
     const DATETIME_FORMAT = 'Y-m-d H:i:s';
 
+    /**
+     * @todo change to https://www.php.net/manual/es/function.filter-var-array.php
+     * @param string $module
+     * @param string $action
+     * @param array $parameters
+     * @return array
+     */
     public static function process(string $module, string $action, array &$parameters): array {
         $preKey = "{$module}_{$action}_";
         $rules = self::getRules($preKey);
@@ -30,6 +37,7 @@ class Sanitize {
 
     protected static function getRules(string $preKey) {
         $sanitize = Configuration::getData('sanitize');
+
         $result = [];
         $length = strlen($preKey);
 

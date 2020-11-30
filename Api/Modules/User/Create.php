@@ -3,7 +3,7 @@
 namespace Api\Modules\User;
 
 use Core\Db\Persistence;
-use Modules\Action;
+use Core\Action;
 
 class Create extends Action {
 

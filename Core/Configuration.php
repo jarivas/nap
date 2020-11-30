@@ -8,7 +8,6 @@ class Configuration {
     private static $modules;
 
     public static function init(): array {
-
         $dir = ROOT_DIR . 'config' . DIRECTORY_SEPARATOR;
         $iniFile = $dir . 'config.ini';
         $jsonFile = $dir . 'config.json';
@@ -76,21 +75,44 @@ class Configuration {
         return $module;
     }
 
-    public static function getData($key) {
+    /**
+     * 
+     * @param string $key
+     * @return null|array
+     */
+    public static function getData(string $key): ?array {
 
-        return self::$data[$key];
+        return in_array($key, self::$data) ? self::$data[$key] : null;
     }
 
+    /**
+     * 
+     * @param string $module
+     * @param string $action
+     * @return bool
+     */
     public static function validateModuleAction(string $module, string $action): bool {
 
         return in_array($action, self::$modules[$module]['actions']);
     }
 
+    /**
+     * 
+     * @param string $module
+     * @param string $action
+     * @return bool
+     */
     public static function shouldAuth(string $module, string $action): bool {
 
         return in_array($action, self::$modules[$module]['auth']);
     }
 
+    /**
+     * 
+     * @param string $module
+     * @param string $action
+     * @return bool
+     */
     public static function isCli(string $module, string $action): bool {
 
         return in_array($action, self::$modules[$module]['cli']);

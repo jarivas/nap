@@ -27,15 +27,22 @@ function procesDataFolder() {
 
 function procesConfig() {
     $iniFile = ROOT_DIR . "config/config.ini";
-    $iniContent = file_get_contents("{$iniFile}.example");
-    $iniContent = str_replace('%datadir%', DATA_DIR, $iniContent);
+    $exampleFile = "{$iniFile}.example";
     
-    if (!file_exists($iniContent)) {
-        die("Example config file not present");
+    if (!file_exists($exampleFile)) {
+        die("Example config file not present: $exampleFile \n");
     }
+    
+    $iniContent = file_get_contents($exampleFile);
+    
+    if (!$iniContent) {
+        die("Problem gettting content from example file \n");
+    }
+    
+    $iniContent = str_replace('%datadir%', DATA_DIR, $iniContent);
 
     if (!file_put_contents($iniFile, $iniContent)) {
-        die("Error creating config file");
+        die("Error creating config file: $iniFile \n");
     }
 }
 
