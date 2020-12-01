@@ -81,8 +81,8 @@ class Configuration {
      * @return null|array
      */
     public static function getData(string $key): ?array {
-
-        return in_array($key, self::$data) ? self::$data[$key] : null;
+        
+        return empty(self::$data[$key]) ? null : self::$data[$key];
     }
 
     /**

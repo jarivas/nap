@@ -7,7 +7,6 @@ class Sanitize {
     const DATETIME_FORMAT = 'Y-m-d H:i:s';
 
     /**
-     * @todo change to https://www.php.net/manual/es/function.filter-var-array.php
      * @param string $module
      * @param string $action
      * @param array $parameters

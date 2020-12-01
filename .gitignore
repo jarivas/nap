@@ -8,6 +8,7 @@
 *.workspace
 config/config.php
 config/config.json
+config/config.ini
 composer.lock
 /nbproject/*
 nbproject/*
