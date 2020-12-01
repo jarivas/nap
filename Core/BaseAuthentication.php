@@ -8,7 +8,7 @@ class BaseAuthentication
 {
     const DATA_STORE = 'user';
 
-    public static function isValid(array $params, Persistence $persistence): bool
+    public static function isValid(array $params): bool
     {
         if (empty($params['token'])) {
             return false;
@@ -16,7 +16,7 @@ class BaseAuthentication
 
         $criteria = ['token' => $params['token']];
 
-        $item = $persistence->readOne($criteria, self::DATA_STORE);
+        $item = Persistence::getPersistence()->readOne($criteria, self::DATA_STORE);
         
         $GLOBALS['user'] = $item;
 

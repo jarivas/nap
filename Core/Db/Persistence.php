@@ -2,40 +2,58 @@
 
 namespace Core\Db;
 
+use Core\Response;
+use Core\Configuration;
+
 abstract class Persistence
 {
     const CRITERIA_EQUAL = '=';
 
     protected static $instance = null;
+    
 
     /**
      *
-     * @param array $db the info contained in the configuration
-     * @return \self
+     * @return self
      */
-    public static function getInstance(array $db): self
+    public static function getPersistence(): self
     {
-        if (!static::$instance) {
-            static::$instance = new static($db);
+        if (self::$instance) {
+            return self::$instance;
         }
+        
+        $db = Configuration::getData('db');
+        
+        if (!$db || empty($db['type'])) {
+            Response::sendWarning(Response::FATAL_INTERNAL_ERROR, 'DB config does not exists or invalid');
+        }
+        
+        $dbType = $db['type'];
+        $callable = '';
+        
+        switch ($dbType) {
+            case 'sleek':
+                $callable = "Core\\Db\\NoSQLEmbed";
+                break;
+        }
+        
+        $db = Configuration::getData($dbType);
 
-        return static::$instance;
+        return self::$instance = new $callable($db);
     }
 
     /**
      *
      * @param array $db the info contained in the configuration
      */
-    protected function __construct(array $db)
-    {
-    }
-
+    abstract protected function __construct(array $db);
+            
     /**
      *
      * @param array $criteria to filter query results (where)
      * @param string|null $storeName aka table or Document
      * @param array $options limit, skip, orderBy
-     * @return array
+     * @return bool
      */
     abstract public function create(array $item, ?string $storeName = null): bool;
 

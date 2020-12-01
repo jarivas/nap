@@ -19,6 +19,10 @@ class Response
 
     protected static function helper(int $code, string $message)
     {
+        if (defined('AVOID_RESPONSE')) {
+            return;
+        }
+        
         header("Content-type: application/json; charset=utf-8");
 
         http_response_code($code);
@@ -45,5 +49,11 @@ class Response
     public static function warning(int $warning_type, string $message)
     {
         self::helper($warning_type, json_encode(['message' => $message]));
+    }
+
+    public static function sendWarning(int $type, string $msg)
+    {
+        Logger::warning($msg);
+        self::warning($type, $msg);
     }
 }

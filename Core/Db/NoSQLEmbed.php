@@ -3,6 +3,7 @@
 namespace Core\Db;
 
 use Core\Db\SleekDB\SleekDB;
+use Core\Response;
 
 class NoSQLEmbed extends Persistence
 {
@@ -19,8 +20,12 @@ class NoSQLEmbed extends Persistence
      */
     protected function __construct(array $db)
     {
-        parent::__construct($db);
-
+        if (empty($db['data_folder']) || empty($db['name'])
+                || is_string($db['data_folder']) || is_string($db['name'])) {
+            
+            Response::sendWarning(Response::FATAL_INTERNAL_ERROR, 'Required DB configuration not present or invalid');
+        }
+        
         $this->path = $db['data_folder'] . $db['name'];
 
         $this->dataset = [];

@@ -1,0 +1,1 @@
+C:37:"PHPUnit\Runner\DefaultTestResultCache":304:{a:2:{s:7:"defects";a:2:{s:51:"Test\Unit\Core\Db\PersitenceTest::testConfiguration";i:4;s:51:"Test\Unit\Core\Db\PersitenceTest::testGetPersitence";i:4;}s:5:"times";a:2:{s:51:"Test\Unit\Core\Db\PersitenceTest::testConfiguration";d:0.002;s:51:"Test\Unit\Core\Db\PersitenceTest::testGetPersitence";d:0.001;}}}

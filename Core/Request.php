@@ -13,12 +13,6 @@ class Request
      * @var array
      */
     protected static $data;
-    
-    /**
-     *
-     * @var Persistence
-     */
-    protected static $persistence;
 
     public static function init($body)
     {
@@ -26,7 +20,7 @@ class Request
         $parameters = [];
 
         if (!strlen($body)) {
-            self::sendWarning(Response::WARNING_BAD_REQUEST, 'Empty body');
+            Response::sendWarning(Response::WARNING_BAD_REQUEST, 'Empty body');
         }
 
         self::setRequestData($body);
@@ -35,7 +29,7 @@ class Request
         
         $parameters = self::getParameters();
         
-        $response = $callable($parameters, self::getPersistence());
+        $response = $callable($parameters, Persistence::getPersistence());
         
         Response::ok($response);
     }
@@ -47,15 +41,15 @@ class Request
         if (!$request) {
             Logger::info($body);
 
-            self::sendWarning(Response::WARNING_BAD_REQUEST, 'JSON not well formed');
+            Response::sendWarning(Response::WARNING_BAD_REQUEST, 'JSON not well formed');
         }
 
         if (empty($request['module'])) {
-            self::sendWarning(Response::WARNING_BAD_REQUEST, 'Module is required');
+            Response::sendWarning(Response::WARNING_BAD_REQUEST, 'Module is required');
         }
 
         if (empty($request['action'])) {
-            self::sendWarning(Response::WARNING_BAD_REQUEST, 'Action is required');
+            Response::sendWarning(Response::WARNING_BAD_REQUEST, 'Action is required');
         }
 
         if (empty($request['parameters'])) {
@@ -71,12 +65,12 @@ class Request
         $action = self::$data['action'];
 
         if (!Configuration::validateModuleAction($module, $action)) {
-            self::sendWarning(Response::WARNING_BAD_REQUEST, 'Wrong Module and/or Action');
+            Response::sendWarning(Response::WARNING_BAD_REQUEST, 'Wrong Module and/or Action');
         }
 
         if (Configuration::shouldAuth($module, $action)) {
-            if (!Authentication::isValid(self::$data['parameters'], self::$persistence)) {
-                self::sendWarning(Response::WARNING_UNAUTHORIZED, 'Wrong login credentials');
+            if (!Authentication::isValid(self::$data['parameters'])) {
+                Response::sendWarning(Response::WARNING_UNAUTHORIZED, 'Wrong login credentials');
             }
         }
 
@@ -93,39 +87,9 @@ class Request
         list($ok, $msg) = Sanitize::process(self::$data['module'], self::$data['action'], $result);
 
         if (!$ok) {
-            Logger::warning($msg);
-            Response::warning(Response::WARNING_BAD_REQUEST, $msg);
+            Response::sendWarning(Response::WARNING_BAD_REQUEST, $msg);
         }
 
         return $result;
-    }
-
-    /**
-     *
-     * @return Persistence
-     */
-    public static function getPersistence(): Persistence
-    {
-        if (self::$persistence) {
-            return self::$persistence;
-        }
-        
-        $db = Configuration::getData('db');
-        $dbType = $db['type'];
-        $callable = '';
-        
-        switch ($dbType) {
-            case 'sleek':
-                $callable = "Core\\Db\\NoSQLEmbed::getInstance";
-                break;
-        }
-
-        return self::$persistence = $callable(Configuration::getData($dbType));
-    }
-
-    protected static function sendWarning(int $type, string $msg)
-    {
-        Logger::warning($msg);
-        Response::warning($type, $msg);
     }
 }

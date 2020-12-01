@@ -1,1 +1,1 @@
-./tools/phpunit/vendor/bin/phpunit --bootstrap test/autoload.php unit  
+./tools/phpunit/vendor/bin/phpunit --bootstrap Test/bootstrap.php Test/Unit
