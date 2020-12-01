@@ -16,3 +16,5 @@ data/*
 .idea/
 NoSQLData/
 .ini
+/.php_cs.cache
+/tools/php-cs-fixer/vendor/

@@ -2,8 +2,8 @@
 
 namespace Core;
 
-class Sanitize {
-
+class Sanitize
+{
     const DATETIME_FORMAT = 'Y-m-d H:i:s';
 
     /**
@@ -12,7 +12,8 @@ class Sanitize {
      * @param array $parameters
      * @return array
      */
-    public static function process(string $module, string $action, array &$parameters): array {
+    public static function process(string $module, string $action, array &$parameters): array
+    {
         $preKey = "{$module}_{$action}_";
         $rules = self::getRules($preKey);
         $parameterName = '';
@@ -34,14 +35,14 @@ class Sanitize {
         return [true, ""];
     }
 
-    protected static function getRules(string $preKey) {
+    protected static function getRules(string $preKey)
+    {
         $sanitize = Configuration::getData('sanitize');
 
         $result = [];
         $length = strlen($preKey);
 
         foreach ($sanitize as $key => $value) {
-
             if (substr($key, 0, $length) === $preKey) {
                 $result[$key] = $value;
             }
@@ -50,7 +51,8 @@ class Sanitize {
         return $result;
     }
 
-    private static function applyFilters(string $filters, string $parameterName, array &$parameters, array &$errors) {
+    protected static function applyFilters(string $filters, string $parameterName, array &$parameters, array &$errors)
+    {
         $filtersError = [];
 
         if (empty($parameters[$parameterName])) {
@@ -70,7 +72,8 @@ class Sanitize {
         }
     }
 
-    private static function applyFilter(string $filter, array &$filtersError, $value) {
+    protected static function applyFilter(string $filter, array &$filtersError, $value)
+    {
         $pieces = explode('_', $filter);
 
         switch ($pieces[0]) {
@@ -117,7 +120,8 @@ class Sanitize {
         }
     }
 
-    private static function getErrorMsg(array &$error): string {
+    protected static function getErrorMsg(array &$error): string
+    {
         $result = '';
 
         foreach ($error as $param => $errors) {
@@ -126,5 +130,4 @@ class Sanitize {
 
         return $result;
     }
-
 }

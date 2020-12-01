@@ -4,21 +4,22 @@ use Core\Logger;
 use Core\Response;
 use Core\Configuration;
 
-function error_handler($errno, $errstr, $errfile, $errline) {
+function error_handler($errno, $errstr, $errfile, $errline)
+{
     $system = Configuration::getData('system');
 
     $message = ($system['debug']) ? sprintf('%s %s:%s', $errstr, $errfile, $errline) : $errstr;
 
     switch ($errno) {
-        case E_WARNING :
+        case E_WARNING:
             Logger::warning($message);
             Response::error($message);
             break;
-        case E_NOTICE :
+        case E_NOTICE:
             Logger::notice($message);
             Response::error($message);
             break;
-        default :
+        default:
             Logger::critical($message);
             Response::error($message);
             break;
@@ -28,7 +29,8 @@ function error_handler($errno, $errstr, $errfile, $errline) {
     return true;
 }
 
-function exception_handler($exception) {
+function exception_handler($exception)
+{
     $system = Configuration::getData('system');
 
     $code = $exception->getCode();
@@ -48,7 +50,8 @@ function exception_handler($exception) {
     }
 }
 
-function shotdown_function() {
+function shotdown_function()
+{
     $error = error_get_last();
 
     if ($error && ($error['type'] == E_ERROR)) {

@@ -4,11 +4,12 @@ namespace Core;
 
 use Core\Db\Persistence;
 
-class BaseAuthentication {
-
+class BaseAuthentication
+{
     const DATA_STORE = 'user';
 
-    public static function isValid(array $params, Persistence $persistence): bool {
+    public static function isValid(array $params, Persistence $persistence): bool
+    {
         if (empty($params['token'])) {
             return false;
         }
@@ -21,5 +22,4 @@ class BaseAuthentication {
 
         return ($item) ? true : false;
     }
-
 }

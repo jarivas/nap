@@ -5,12 +5,12 @@ namespace Api\Modules\User;
 use Core\Db\Persistence;
 use Core\Action;
 
-class Logout extends Action {
-
+class Logout extends Action
+{
     const DATA_STORE = 'user';
 
-    public static function process(array $params, Persistence $persistence): array {
-
+    public static function process(array $params, Persistence $persistence): array
+    {
         $user = self::getCurrentUser();
 
         $criteria = ['user_id' => $user['_id']];
@@ -23,5 +23,4 @@ class Logout extends Action {
 
         return ['success' => $persistence->update($criteria, $user, self::DATA_STORE)];
     }
-
 }
