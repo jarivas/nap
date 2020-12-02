@@ -8,12 +8,6 @@ use Core\Db\Persistence as CoreDb;
 
 final class PersitenceTest extends TestCase {
     
-    /**
-     *
-     * @var Persistence 
-     */
-    private $persistence;
-    
     private $storeName = 'test';
     
     private $item = ['name' => 'Jose', 'age' => 37];
@@ -44,8 +38,6 @@ final class PersitenceTest extends TestCase {
         $persistence = CoreDb::getPersistence();
         
         $this->assertIsObject($persistence, "Error getting persistence");
-        
-        $this->persistence = $persistence;
     }
     
     /**
@@ -53,9 +45,16 @@ final class PersitenceTest extends TestCase {
      */
     public function testDeleteAll(): void
     {
-        $result = $this->persistence->delete([], $this->storeName);
+        $persistence = CoreDb::getPersistence();
+        $criteria = [];
+        
+        $result = $persistence->delete($criteria, $this->storeName);
         
         $this->assertTrue($result, 'Error on deleteAll');
+        
+        $result = $persistence->read($criteria, $this->storeName);
+        
+        $this->assertNull($result, 'Error on deleteall, nothing was deleted problem');
     }
     
     
@@ -64,22 +63,57 @@ final class PersitenceTest extends TestCase {
      */
     public function testCreate(): void
     {
-        $result = $this->persistence->create($this->item, $this->storeName);
+        $persistence = CoreDb::getPersistence();
+        
+        $result = $persistence->create($this->item, $this->storeName);
         
         $this->assertTrue($result, 'Error on create');
+        
+        for ($i = 0; $i < 10; ++$i) {
+            $item = $this->item;
+            $item['name'] .= strval($i);
+            
+            $result = $persistence->create($item, $this->storeName);
+            
+            $this->assertTrue($result, 'Error on create multiple');
+        }
     }
     
     
     /**
      * @depends testCreate
      */
-    public function testReadOne(): void
+    public function testRead(): void
     {
-        $criteria = ['name' => $this->item['name']];
+        $persistence = CoreDb::getPersistence();
+        $criteria = ['and' => ['name' => $this->item['name']]];
         
-        $result = $this->persistence->readOne($criteria, $this->storeName);
+        $result = $persistence->readOne($criteria, $this->storeName);
         
-        $this->assertIsArray($result, 'Error on readOne');
+        $this->assertIsArray($result, 'Error on read');
         $this->assertArrayHasKey('name', $result, 'Error on readOne, invalid result');
+        $this->assertSame($this->item['name'], $result['name'], 'Error on read, item returned is different');
+    }
+    
+    
+    public function testUpdate(): void
+    {
+        $persistence = CoreDb::getPersistence();
+        $criteria = ['and' => ['col' => 'name', 'op' => '=', 'value' => $this->item['name']]];
+        
+        $updatedItem = $this->item;
+        $updatedItem['name'] = 'Paolo';
+        
+        $result = $persistence->update($criteria, $updatedItem, $this->storeName);
+        
+        $this->assertTrue($result, 'Error on update');
+        
+        $criteria = ['and' => ['name' => $updatedItem['name']]];
+        
+        $result = $persistence->readOne($criteria, $this->storeName);
+        
+        $this->assertIsArray($result, 'Error on update, reading after update problem');
+        $this->assertArrayHasKey('name', $result, 'Error on update, invalid result');
+        $this->assertSame($updatedItem['name'], $result['name'], 'Error on update, item was never updated');
     }
 }

@@ -72,9 +72,7 @@ class NoSQLEmbed extends Persistence
         $store = $this->initDataset($storeName);
         $result = [];
 
-        foreach ($criteria as $fieldName => $value) {
-            $store->where($fieldName, self::CRITERIA_EQUAL, $value);
-        }
+        $this->setWhere($store, $criteria);
 
         if (isset($options['limit']) && is_int($options['limit'])) {
             $store->limit($options['limit']);
