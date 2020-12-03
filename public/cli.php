@@ -10,7 +10,7 @@ define('CORE_DIR', ROOT_DIR . 'Core' . DIRECTORY_SEPARATOR);
 require CORE_DIR .'autoload.php';
 
 use Core\Configuration;
-use Core\Request;
+use Core\Db\Persistence;
 use Core\Sanitize;
 
 /* START */
@@ -32,7 +32,7 @@ Configuration::init();
 
 $className = getModuleAction($request);
 
-$result = $className(getParameters($request), Request::getPersistence());
+$result = $className(getParameters($request), Persistence::getPersistence());
 
 exit(json_encode($result));
 /* END */

@@ -2,7 +2,7 @@
 
 namespace Api\Modules\User;
 
-use Core\Db\Persistence;
+use Core\Db\Persistence as DB;
 use Core\Action;
 
 class Logout extends Action
@@ -13,8 +13,7 @@ class Logout extends Action
     {
         $user = self::getCurrentUser();
 
-        $criteria = ['user_id' => $user['_id']];
-
+        $criteria = ['user_id' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $user['_id']]];
 
         $user['token'] = null;
         $user['ip'] = null;

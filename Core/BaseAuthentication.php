@@ -2,7 +2,7 @@
 
 namespace Core;
 
-use Core\Db\Persistence;
+use Core\Db\Persistence as DB;
 
 class BaseAuthentication
 {
@@ -14,9 +14,9 @@ class BaseAuthentication
             return false;
         }
 
-        $criteria = ['token' => $params['token']];
+        $criteria = ['token' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $params['token']]];
 
-        $item = Persistence::getPersistence()->readOne($criteria, self::DATA_STORE);
+        $item = DB::getPersistence()->readOne($criteria, self::DATA_STORE);
         
         $GLOBALS['user'] = $item;
 

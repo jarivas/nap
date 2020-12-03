@@ -8,7 +8,7 @@ trait Logger
 {
     protected static $logDir = false;
 
-    protected static function write(string $level, string $message)
+    protected static function write(string $level, string $message): bool
     {
         $result = false;
 
@@ -22,7 +22,11 @@ trait Logger
             if ($system['debug'] || $level === Logger::CRITICAL
                     || $level === Logger::ERROR || $level === Logger::EMERGENCY) {
                 
-                $message .= PHP_EOL . print_r(array_slice(debug_backtrace(), 2, 5), 1);
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 7);
+                
+                $trace = array_slice($trace, 2);
+                
+                $message .= PHP_EOL . print_r($trace, true);
             }
 
             $result = file_put_contents($fileName, $message, FILE_APPEND | LOCK_EX);

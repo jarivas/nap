@@ -2,16 +2,16 @@
 
 namespace Api\Modules\User;
 
-use Core\Db\Persistence;
+use Core\Db\Persistence as DB;
 use Core\Action;
 
 class Login extends Action
 {
-    public static function process(array $params, Persistence $persistence): array
+    public static function process(array $params, DB $persistence): array
     {
         $user = self::getCurrentUser();
         
-        $criteria = ['user_id' => $user['_id']];
+        $criteria = ['user_id' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $user['_id']]];
         
         if (password_verify($params['password'], $user['password'])) {
             $user = array_merge($user, [

@@ -43,5 +43,6 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) !== 'POST') {
 
 $body = file_get_contents('php://input');
 
-Request::init($body);
-
+$response = Request::init($body);
+        
+Response::ok($response);

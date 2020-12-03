@@ -21,9 +21,9 @@ class NoSQLEmbed extends Persistence
     protected function __construct(array $db)
     {
         if (empty($db['data_folder']) || empty($db['name'])
-                || is_string($db['data_folder']) || is_string($db['name'])) {
+                || !is_string($db['data_folder']) || !is_string($db['name'])) {
             
-            Response::sendWarning(Response::FATAL_INTERNAL_ERROR, 'Required DB configuration not present or invalid');
+            throw new \Exception('Required DB configuration not present or invalid: ', Response::FATAL_INTERNAL_ERROR);
         }
         
         $this->path = $db['data_folder'] . $db['name'];
@@ -131,8 +131,12 @@ class NoSQLEmbed extends Persistence
      */
     protected function setWhere(SleekDB $store, array &$criteria)
     {
-        foreach ($criteria as $fieldName => $value) {
-            $store->where($fieldName, self::CRITERIA_EQUAL, $value);
+        foreach ($criteria as $fieldName => $c) {
+            if ($c[0] === self::CRITERIA_AND) {
+                $store->where($fieldName, $c[1], $c[2]);
+            } else if ($c[0] === self::CRITERIA_OR) {
+                $store->whereOr($fieldName, $c[1], $c[2]);
+            }
         }
     }
 

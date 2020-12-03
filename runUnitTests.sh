@@ -1,1 +1,1 @@
-./tools/phpunit/vendor/bin/phpunit --bootstrap Test/bootstrap.php Test/Unit
+./tools/phpunit/vendor/bin/phpunit --verbose --bootstrap Test/bootstrap.php Test/Unit

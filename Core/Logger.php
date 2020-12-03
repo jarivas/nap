@@ -16,45 +16,45 @@ class Logger
     const DEBUG = 'debug';
 
     protected static $requestId;
-
-    public static function debug(string $message)
+    
+    public static function debug(string $message): bool
     {
-        self::write(self::DEBUG, $message);
+        return self::write(self::DEBUG, $message);
     }
 
-    public static function info(string $message)
+    public static function info(string $message): bool
     {
-        self::write(self::INFO, $message);
+        return self::write(self::INFO, $message);
     }
 
-    public static function notice(string $message)
+    public static function notice(string $message): bool
     {
-        self::write(self::NOTICE, $message);
+        return self::write(self::NOTICE, $message);
     }
 
-    public static function warning(string $message)
+    public static function warning(string $message): bool
     {
-        self::write(self::WARNING, $message);
+        return self::write(self::WARNING, $message);
     }
 
-    public static function error(string $message)
+    public static function error(string $message): bool
     {
-        self::write(self::ERROR, $message);
+        return self::write(self::ERROR, $message);
     }
 
-    public static function critical(string $message)
+    public static function critical(string $message): bool
     {
-        self::write(self::CRITICAL, $message);
+        return self::write(self::CRITICAL, $message);
     }
 
-    public static function alert(string $message)
+    public static function alert(string $message): bool
     {
-        self::write(self::ALERT, $message);
+        return self::write(self::ALERT, $message);
     }
 
-    public static function emergency(string $message)
+    public static function emergency(string $message): bool
     {
-        self::write(self::EMERGENCY, $message);
+        return self::write(self::EMERGENCY, $message);
     }
 
     public static function setRequestId(string $requestId)

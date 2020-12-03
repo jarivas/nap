@@ -14,7 +14,7 @@ data_folder = %datadir%
 name = cv
 
 [user]
-actions = login,logout,update
+actions = login,logout
 auth = logout,update
 cli = create
 

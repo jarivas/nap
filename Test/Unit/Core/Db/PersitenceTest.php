@@ -4,7 +4,7 @@ namespace Test\Unit\Core\Db;
 
 use PHPUnit\Framework\TestCase;
 use Core\Configuration as CoreConfig;
-use Core\Db\Persistence as CoreDb;
+use Core\Db\Persistence as DB;
 
 final class PersitenceTest extends TestCase {
     
@@ -30,40 +30,57 @@ final class PersitenceTest extends TestCase {
         $this->assertIsArray($db, 'DB_TYPE config is not an array');
     }
     
+    
     /**
      * @depends testConfiguration
-     */
+     */ 
     public function testGetPersitence(): void
     {
-        $persistence = CoreDb::getPersistence();
+        $persistence = DB::getPersistence();
         
         $this->assertIsObject($persistence, "Error getting persistence");
     }
+  
     
     /**
      * @depends testGetPersitence
-     */
+     */ 
     public function testDeleteAll(): void
     {
-        $persistence = CoreDb::getPersistence();
-        $criteria = [];
+        $persistence = DB::getPersistence();
+        $criteria = [
+            '_id' => [DB::CRITERIA_AND, DB::CRITERIA_NOT_EQUAL, 0]
+        ];
         
         $result = $persistence->delete($criteria, $this->storeName);
         
         $this->assertTrue($result, 'Error on deleteAll');
-        
-        $result = $persistence->read($criteria, $this->storeName);
-        
-        $this->assertNull($result, 'Error on deleteall, nothing was deleted problem');
     }
     
     
     /**
      * @depends testDeleteAll
+     */ 
+    public function testReadAll(): void
+    {
+        $persistence = DB::getPersistence();
+        $criteria = [
+            '_id' => [DB::CRITERIA_AND, DB::CRITERIA_NOT_EQUAL, 0]
+        ];
+        
+        $result = $persistence->read($criteria, $this->storeName);
+        
+        $this->assertNull($result, print_r($result, true));
+    }
+    
+    
+    
+    /**
+     * @depends testReadAll
      */
     public function testCreate(): void
     {
-        $persistence = CoreDb::getPersistence();
+        $persistence = DB::getPersistence();
         
         $result = $persistence->create($this->item, $this->storeName);
         
@@ -85,8 +102,10 @@ final class PersitenceTest extends TestCase {
      */
     public function testRead(): void
     {
-        $persistence = CoreDb::getPersistence();
-        $criteria = ['and' => ['name' => $this->item['name']]];
+        $persistence = DB::getPersistence();
+        $criteria = [
+            'name' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $this->item['name']]
+        ];
         
         $result = $persistence->readOne($criteria, $this->storeName);
         
@@ -98,8 +117,10 @@ final class PersitenceTest extends TestCase {
     
     public function testUpdate(): void
     {
-        $persistence = CoreDb::getPersistence();
-        $criteria = ['and' => ['col' => 'name', 'op' => '=', 'value' => $this->item['name']]];
+        $persistence = DB::getPersistence();
+        $criteria = [
+            'name' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $this->item['name']]
+        ];
         
         $updatedItem = $this->item;
         $updatedItem['name'] = 'Paolo';
@@ -108,7 +129,9 @@ final class PersitenceTest extends TestCase {
         
         $this->assertTrue($result, 'Error on update');
         
-        $criteria = ['and' => ['name' => $updatedItem['name']]];
+        $criteria = [
+            'name' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $updatedItem['name']]
+        ];
         
         $result = $persistence->readOne($criteria, $this->storeName);
         
@@ -116,4 +139,5 @@ final class PersitenceTest extends TestCase {
         $this->assertArrayHasKey('name', $result, 'Error on update, invalid result');
         $this->assertSame($updatedItem['name'], $result['name'], 'Error on update, item was never updated');
     }
+
 }

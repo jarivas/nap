@@ -4,10 +4,19 @@ namespace Core\Db;
 
 use Core\Response;
 use Core\Configuration;
+use Exception;
 
 abstract class Persistence
 {
+    
+    const CRITERIA_AND = 'and';
+    const CRITERIA_OR = 'or';
     const CRITERIA_EQUAL = '=';
+    const CRITERIA_NOT_EQUAL = '!=';
+    const CRITERIA_GREATER = '>';
+    const CRITERIA_GREATER_EQUAL = '>=';
+    const CRITERIA_LESS = '<';
+    const CRITERIA_LESS_EQUAL = '<=';
 
     protected static $instance = null;
     
@@ -25,7 +34,8 @@ abstract class Persistence
         $db = Configuration::getData('db');
         
         if (!$db || empty($db['type'])) {
-            Response::sendWarning(Response::FATAL_INTERNAL_ERROR, 'DB config does not exists or invalid');
+            
+            throw new Exception('DB config does not exists or invalid', Response::FATAL_INTERNAL_ERROR);
         }
         
         $dbType = $db['type'];
