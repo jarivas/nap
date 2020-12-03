@@ -41,8 +41,6 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) !== 'POST') {
     Response::warning(Response::WARNING_METHOD_NOT_ALLOWED, $msg);
 }
 
-$body = file_get_contents('php://input');
-
-$response = Request::init($body);
+$response = Request::getResponse();
         
 Response::ok($response);

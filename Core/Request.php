@@ -15,17 +15,12 @@ class Request
      */
     protected static $data;
 
-    public static function init($body): array
+    public static function getResponse(): array
     {
         $callable = '';
         $parameters = [];
-
-        if (!strlen($body)) {
-            
-            throw new Exception('Empty body', Response::WARNING_BAD_REQUEST);
-        }
-
-        self::setRequestData($body);
+        
+        self::setRequestData(file_get_contents('php://input'));
 
         $callable = self::getModuleAction();
         
@@ -34,8 +29,14 @@ class Request
         return $callable($parameters, Persistence::getPersistence());
     }
 
-    protected static function setRequestData(string &$body)
+    protected static function setRequestData(string $body)
     {
+
+        if (!strlen($body)) {
+            
+            throw new Exception('Empty body', Response::WARNING_BAD_REQUEST);
+        }
+        
         $request = json_decode($body, true);
 
         if (!$request) {
