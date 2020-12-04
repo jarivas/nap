@@ -16,6 +16,8 @@ class BaseAuthenticationTest extends TestCase {
     
     private $token = "t1235";
     
+    private $iniFile = ROOT_DIR . 'Test/config/config.ini';
+    
     public function testIsValidNoToken(): void
     {
         
@@ -30,7 +32,7 @@ class BaseAuthenticationTest extends TestCase {
     public function testIsValidRandomToken(): void
     {
         
-        list($result, $message) = CoreConfig::init();
+        list($result, $message) = CoreConfig::init($this->iniFile);
         
         $this->assertTrue($result, "Error on config init: $message");
         

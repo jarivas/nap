@@ -7,11 +7,9 @@ class Configuration
     protected static $data;
     protected static $modules;
 
-    public static function init(): array
+    public static function init(string $iniFile): array
     {
-        $dir = ROOT_DIR . 'config' . DIRECTORY_SEPARATOR;
-        $iniFile = $dir . 'config.ini';
-        $jsonFile = $dir . 'config.json';
+        $jsonFile = str_replace('.ini', '.json', $iniFile);
 
         if (!file_exists($iniFile)) {
             return [false, 'config file not present'];
@@ -53,16 +51,30 @@ class Configuration
 
     protected static function processIniModule(array &$config): array
     {
+        if (empty($config['actions'])) {
+            throw new \Exception('Actions not present', Response::FATAL_INTERNAL_ERROR);
+        }
+        
+        if (!is_string($config['actions'])) {
+            throw new \Exception('Actions not valid', Response::FATAL_INTERNAL_ERROR);
+        }
+        
+        $dummy = preg_replace("/\s+/", "", $config['actions']);
+        
         $module = [
-            'actions' => explode(',', $config['actions'])
+            'actions' => explode(',', $dummy)
         ];
 
         if (isset($config['auth'])) {
-            $module['auth'] = explode(',', $config['auth']);
+            
+            $dummy = preg_replace("/\s+/", "", $config['auth']);
+            $module['auth'] = explode(',', $dummy);
         }
 
         if (isset($config['cli'])) {
-            $module['cli'] = explode(',', $config['cli']);
+            
+            $dummy = preg_replace("/\s+/", "", $config['cli']);
+            $module['cli'] = explode(',', $dummy);
         }
 
         return $module;

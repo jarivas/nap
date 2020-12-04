@@ -16,7 +16,9 @@ if (!Logger::canLog()) {
 
 Logger::setRequestId(uniqid('', true));
 
-list($ok, $msg) = Configuration::init();
+$iniFile = ROOT_DIR .'config/config.ini';
+
+list($ok, $msg) = Configuration::init($iniFile);
 
 if (!$ok) {
     die($msg);

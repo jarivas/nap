@@ -11,11 +11,13 @@ final class PersitenceTest extends TestCase {
     private $storeName = 'test';
     
     private $item = ['name' => 'Jose', 'age' => 37];
+    
+    private $iniFile = ROOT_DIR . 'Test/config/config.ini';
 
 
     public function testConfiguration(): void
     {
-        list($result, $message) = CoreConfig::init();
+        list($result, $message) = CoreConfig::init($this->iniFile);
         
         $this->assertTrue($result, "Error on config init: $message");
         
