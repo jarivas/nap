@@ -109,11 +109,17 @@ class ConfigurationTest extends TestCase {
         $this->assertTrue($result, 'Module user, action login should be part of the test config');
     }
 
+    /**
+     * @depends testGetData
+     */
     public function testShouldAuth(): void {
         $result = Configuration::shouldAuth('user', 'logout');
         $this->assertTrue($result, 'Module user, action logout should be part of the test config');
     }
 
+    /**
+     * @depends testGetData
+     */
     public function testIsCli(): void {
         $result = Configuration::isCli('user', 'create');
         $this->assertTrue($result, 'Module user, action create should be part of the test config');

@@ -12,6 +12,10 @@ class Request extends CoreRequest {
     {
         parent::setRequestData($body);
     }
+    
+    public static function getData(): array {
+        return self::$data;
+    }
 
     public static function getModuleAction(): string
     {
@@ -29,7 +33,30 @@ class RequestTest extends TestCase
     
     public function testSetRequestData(): void
     {
+        $body = <<<JSON
+{
+    "module": "user",
+    "action": "login",
+    "parameters": {
+        "username": "jose",
+        "password": "hola"
+    }
+}
+JSON;
         
+        Request::setRequestData($body);
+        
+        $data = Request::getData();
+        
+        $this->assertArrayHasKey('module', $data);
+        $this->assertSame('user', $data['module']);
+        
+        $this->assertArrayHasKey('action', $data);
+        $this->assertSame('login', $data['action']);
+        
+        $this->assertArrayHasKey('parameters', $data);
+        $this->assertArrayHasKey('username', $data['parameters']);
+        $this->assertArrayHasKey('password', $data['parameters']);
     }
     
     /**
@@ -37,7 +64,11 @@ class RequestTest extends TestCase
      */
     public function testGetModuleAction(): void
     {
+        $expected = "Api\\Modules\\User\\Login::process";
         
+        $actual = Request::getModuleAction();
+        
+        $this->assertSame($expected, $actual);
     }
     
     /**
@@ -45,14 +76,10 @@ class RequestTest extends TestCase
      */
     public function testGetParameters(): void
     {
+        $actual = Request::getParameters();
         
-    }
-    
-    /**
-     * @depends testSetRequestData
-     */
-    public function testGetResponse(): void
-    {
-        
+        $this->assertIsArray($actual);
+        $this->assertArrayHasKey('username', $actual);
+        $this->assertArrayHasKey('password', $actual);
     }
 }
