@@ -2,8 +2,10 @@
 
 namespace Core;
 
-class Sanitize
-{
+use Exception;
+
+class Sanitize {
+
     const DATETIME_FORMAT = 'Y-m-d H:i:s';
 
     /**
@@ -12,8 +14,7 @@ class Sanitize
      * @param array $parameters
      * @return array
      */
-    public static function process(string $module, string $action, array &$parameters): array
-    {
+    public static function process(string $module, string $action, array &$parameters): array {
         $preKey = "{$module}_{$action}_";
         $rules = self::getRules($preKey);
         $parameterName = '';
@@ -35,8 +36,7 @@ class Sanitize
         return [true, ""];
     }
 
-    protected static function getRules(string $preKey)
-    {
+    protected static function getRules(string $preKey) {
         $sanitize = Configuration::getData('sanitize');
 
         $result = [];
@@ -51,29 +51,23 @@ class Sanitize
         return $result;
     }
 
-    protected static function applyFilters(string $filters, string $parameterName, array &$parameters, array &$errors)
-    {
+    protected static function applyFilters(string $filters, string $parameterName, array &$parameters, array &$errors) {
         $filtersError = [];
 
-        if (empty($parameters[$parameterName])) {
-            if (strpos($filters, 'REQUIRED') !== false) {
-                $filtersError[] = 'Required';
-            }
-        } else {
-            $value = $parameters[$parameterName];
-
-            foreach (explode('|', $filters) as $filter) {
-                self::applyFilter($filter, $filtersError, $value);
-            }
+        $value = $parameters[$parameterName];
+        
+        foreach (explode('+', $filters) as $filter) {
+            self::applyFilter($filter, $filtersError, $value);
         }
 
         if (count($filtersError)) {
             $errors[$parameterName] = $filtersError;
+        } else {
+            $parameters[$parameterName] = $value;
         }
     }
 
-    protected static function applyFilter(string $filter, array &$filtersError, $value)
-    {
+    protected static function applyFilter(string $filter, array &$filtersError, &$value) {        
         $pieces = explode('_', $filter);
 
         switch ($pieces[0]) {
@@ -83,11 +77,15 @@ class Sanitize
                 }
                 break;
             case 'REQUIRED':
-                if (!$value) {
+                if (!$value || !strlen($value)) {
                     $filtersError[] = 'Required';
                 }
                 break;
             case 'DATETIME':
+                if (!$value || !strlen($value)) {
+                    return;
+                }
+                
                 $value = \DateTime::createFromFormat(self::DATETIME_FORMAT, $value);
 
                 if (!$value) {
@@ -95,33 +93,35 @@ class Sanitize
                 }
                 break;
             case 'FILTER':
-                if ($pieces[1] === 'SANITIZE') {
+                if (!$value || !strlen($value)) {
+                    return;
+                }
+                
+                $flag = self::getFilterFlag($filter);
+                
+                if (!count($flag)) {
                     $value = filter_var($value, constant($filter));
-
-                    if ($pieces[3] === 'INT') {
-                        $value = intval($value);
-                    }
+                } else {
+                    $value = filter_var($value, constant($flag[0]), constant($flag[1]));                    
                 }
 
-                if ($pieces[1] === 'VALIDATE') {
-                    if (!filter_var($value, constant($filter))) {
-                        $filtersError[] = 'Invalid';
-                    } else {
-                        if ($pieces[3] === 'INT') {
-                            $value = intval($value);
-                        }
-
-                        if ($pieces[3] === 'FLOAT') {
-                            $value = floatval($value);
-                        }
-                    }
+                if (!$value) {
+                    throw new Exception("Invalid filter : $value", Response::FATAL_INTERNAL_ERROR);
                 }
                 break;
         }
     }
+    
+    protected static function getFilterFlag(string $filter): array {
+        
+        if (strpos($filter, '-') === false) {
+            return [];
+        }
+        
+        return explode('-', $filter);
+    }
 
-    protected static function getErrorMsg(array &$error): string
-    {
+    protected static function getErrorMsg(array &$error): string {
         $result = '';
 
         foreach ($error as $param => $errors) {
@@ -130,4 +130,5 @@ class Sanitize
 
         return $result;
     }
+
 }
