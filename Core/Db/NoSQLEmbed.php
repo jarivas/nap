@@ -26,7 +26,7 @@ class NoSQLEmbed extends Persistence
             throw new \Exception('Required DB configuration not present or invalid: ', Response::FATAL_INTERNAL_ERROR);
         }
         
-        $this->path = $db['data_folder'] . $db['name'];
+        $this->path = ROOT_DIR . $db['data_folder'] . DIRECTORY_SEPARATOR . $db['name'];
 
         $this->dataset = [];
     }

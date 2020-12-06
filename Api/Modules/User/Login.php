@@ -7,11 +7,12 @@ use Core\Action;
 
 class Login extends Action
 {
+    
     public static function process(array $params, DB $persistence): array
-    {
-        $user = self::getCurrentUser();
+    {        
+        $criteria = ['username' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $params['username']]];
         
-        $criteria = ['user_id' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $user['_id']]];
+        $user = $persistence->readOne($criteria, self::USER_STORE);
         
         if (password_verify($params['password'], $user['password'])) {
             $user = array_merge($user, [
@@ -21,7 +22,7 @@ class Login extends Action
                 'expire' => (new \DateTime())->add(new \DateInterval('P0DT1H'))->getTimestamp()
             ]);
 
-            if ($persistence->update($criteria, $user, self::DATA_STORE)) {
+            if ($persistence->update($criteria, $user, self::USER_STORE)) {
                 return ['success' => true, 'token' => $user['token']];
             }
         }

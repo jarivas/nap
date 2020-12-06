@@ -28,7 +28,9 @@ if (!strlen($body)) {
 
 $request = getRequestData($body);
 
-Configuration::init();
+$iniFile = ROOT_DIR .'config/config.ini';
+
+Configuration::init($iniFile);
 
 $className = getModuleAction($request);
 

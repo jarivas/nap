@@ -19,3 +19,4 @@ NoSQLData/
 /.php_cs.cache
 /tools/php-cs-fixer/vendor/
 /Test/config/config.json
+/tools/phpunit/vendor/

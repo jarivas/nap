@@ -32,7 +32,7 @@ class Create extends Action
     
     protected static function existUsername(string $username): bool
     {
-        $result = self::$persistence->readOne(['username' => $username], self::DATA_STORE);
+        $result = self::$persistence->readOne(['username' => $username], self::USER_STORE);
         
         return ($result && is_array($result));
     }

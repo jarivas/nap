@@ -56,7 +56,7 @@ class SanitizeTest extends TestCase {
         $this->assertArrayHasKey('user_login_username', $rules);
         $this->assertArrayHasKey('user_login_password', $rules);
 
-        $this->assertSame('REQUIRED+FILTER_SANITIZE_STRING', $rules['user_login_username']);
+        $this->assertSame('REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH', $rules['user_login_username']);
         $this->assertSame('REQUIRED+FILTER_SANITIZE_STRING', $rules['user_login_password']);
     }
 

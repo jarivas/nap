@@ -10,7 +10,7 @@ use Core\Db\Persistence as DB;
 
 
 class BaseAuthenticationTest extends TestCase {
-    private $storeName = 'user';
+    private static $storeName = 'user';
     
     private $item = ['name' => 'Jose', 'age' => 37];
     
@@ -42,7 +42,7 @@ class BaseAuthenticationTest extends TestCase {
             '_id' => [DB::CRITERIA_AND, DB::CRITERIA_NOT_EQUAL, 0]
         ];
         
-        $result = $persistence->delete($criteria, $this->storeName);
+        $result = $persistence->delete($criteria, self::$storeName);
         
         $this->assertTrue($result, 'Error on cleaning db');
         
@@ -66,12 +66,21 @@ class BaseAuthenticationTest extends TestCase {
         
         $persistence = DB::getPersistence();
          
-        $result = $persistence->create($item, $this->storeName);
+        $result = $persistence->create($item, self::$storeName);
         
         $this->assertTrue($result, 'Error creating the dummy user');
         
         
         $result = Auth::isValid($params);
         $this->assertTrue($result, 'Error validating the user');
+    }
+
+    public static function tearDownAfterClass(): void {        
+        $persistence = DB::getPersistence();
+        $criteria = [
+            '_id' => [DB::CRITERIA_AND, DB::CRITERIA_NOT_EQUAL, 0]
+        ];
+
+        $result = $persistence->delete($criteria, 'user');
     }
 }

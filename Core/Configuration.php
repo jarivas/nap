@@ -41,7 +41,7 @@ class Configuration
                 self::$modules[$index] = self::processIniModule($config);
             }
         }
-
+        
         if (!file_put_contents($jsonFile, json_encode([self::$data, self::$modules]))) {
             return [false, 'Error saving config.json'];
         }

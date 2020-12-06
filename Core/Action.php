@@ -13,6 +13,6 @@ abstract class Action
     
     protected static function getCurrentUser(): ?array
     {
-        return emtpy($GLOBALS['user']) ? null : $GLOBALS['user'];
+        return empty($GLOBALS['user']) ? null : $GLOBALS['user'];
     }
 }

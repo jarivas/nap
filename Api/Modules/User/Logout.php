@@ -7,19 +7,17 @@ use Core\Action;
 
 class Logout extends Action
 {
-    const DATA_STORE = 'user';
-
-    public static function process(array $params, Persistence $persistence): array
+    public static function process(array $params, DB $persistence): array
     {
         $user = self::getCurrentUser();
 
-        $criteria = ['user_id' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $user['_id']]];
+        $criteria = ['_id' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $user['_id']]];
 
         $user['token'] = null;
         $user['ip'] = null;
         $user['proxy'] = null;
         $user['expire'] = null;
 
-        return ['success' => $persistence->update($criteria, $user, self::DATA_STORE)];
+        return ['success' => $persistence->update($criteria, $user, self::USER_STORE)];
     }
 }

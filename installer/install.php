@@ -1,28 +1,44 @@
 <?php
 
 define('ROOT_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR);
-define('DATA_DIR', ROOT_DIR . 'data' . DIRECTORY_SEPARATOR);
 define('CONFIG_DIR', ROOT_DIR . 'config' . DIRECTORY_SEPARATOR);
 
 require 'basic.php';
 
 /* START */
 
-procesDataFolder();
+if (!file_exists(ROOT_DIR . 'data') || !file_exists(ROOT_DIR . 'log')) {
+    die('Please run the unit test before this' . PHP_EOL);
+}
 
 procesConfig();
 
 createRequest();
 
+
 /* END */
 
 /* FUNCTIONS */
 
-function procesDataFolder() {
-    if (!file_exists(DATA_DIR)) {
-        run('mkdir -p ' . DATA_DIR);
-        run('chmod -R 777 ' . DATA_DIR);
-    }    
+function procesFolders(array $config) {
+    $db = $config['db'];
+    $db = $config[$db['type']];
+    
+    $folder = ROOT_DIR . $db['data_folder'] . DIRECTORY_SEPARATOR . $db['name'];
+    
+    processFolder($folder);
+    
+    $folder = ROOT_DIR . 'log';
+    
+    processFolder($folder);
+}
+
+function processFolder($folder) {
+    if (!file_exists($folder)) {
+        run('mkdir -p ' . $folder);
+    }
+    
+    echoLine('Run this command: chmod -R 777 ' .  $folder);
 }
 
 function procesConfig() {
@@ -38,12 +54,12 @@ function procesConfig() {
     if (!$iniContent) {
         die("Problem gettting content from example file \n");
     }
-    
-    $iniContent = str_replace('%datadir%', DATA_DIR, $iniContent);
 
     if (!file_put_contents($iniFile, $iniContent)) {
         die("Error creating config file: $iniFile \n");
     }
+    
+    //return parse_ini_string($iniContent, true, INI_SCANNER_TYPED);
 }
 
 function readUser() {

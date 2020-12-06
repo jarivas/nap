@@ -2,6 +2,6 @@
 
 namespace Api;
 
-class Authentication extends Core\BaseAuthentication
+class Authentication extends \Core\BaseAuthentication
 {
 }
