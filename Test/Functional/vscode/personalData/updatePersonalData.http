@@ -1,0 +1,47 @@
+###
+# @name login
+POST http://nap.local HTTP/1.1
+
+{
+    "module": "user",
+    "action": "login",
+    "parameters": {
+        "username": "{{username}}",
+        "password": "{{password}}"
+    }
+}
+
+###
+@token = {{login.response.body.token}}
+
+###
+# @name updatePersonalData
+POST http://nap.local HTTP/1.1
+
+{
+    "module": "personalData",
+    "action": "update",
+    "parameters": {
+        "token": "{{token}}",
+        "firstName": "Jose A",
+        "lastName": "Rivas",
+        "emailAddress": "me@jarivas.mail",
+        "dateOfBirth": "1983-01-01 00:00:00",
+        "industry": "IT",
+        "headline": "This is a headline",
+        "summary": "This is a really detailed summary",
+        "location": "Malaga, Andalusia, Spain"
+    }
+}
+
+###
+# @name getPersonalData
+POST http://nap.local HTTP/1.1
+
+{
+    "module": "personalData",
+    "action": "read",
+    "parameters": {
+        "token": "{{token}}"
+    }
+}

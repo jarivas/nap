@@ -2,38 +2,32 @@
 
 namespace Api\Modules\User;
 
-use Core\Db\Persistence;
+use Core\Db\Persistence as DB;
 use Core\Action;
 
 class Create extends Action
 {
-    const DATA_STORE = 'user';
     
-    /**
-     *
-     * @var Persistence
-     */
-    protected static $persistence;
-
-    public static function process(array $params, Persistence $persistence): array
+    protected static function existsUsername(string $username, DB $persistence): bool
     {
-        self::$persistence = $persistence;
+        $criteria = ['username' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $username]];
         
-        if (self::existUsername($params['username'])) {
+        $user = $persistence->readOne($criteria, self::USER_STORE);        
+        
+        return ($user && is_array($user));
+    }
+
+    public static function process(array $params, DB $persistence): array {
+        
+        if (self::existsUsername($params['username'], $persistence)) {
             return ["success" => false, 'msg' => "User already exists"];
         }
         
-        if ($persistence->create($params, self::DATA_STORE)) {
+        if ($persistence->create($params, self::USER_STORE)) {
             return ["success" => true];
         }
         
         return ["success" => false, 'msg' => "Error on saving"];
     }
-    
-    protected static function existUsername(string $username): bool
-    {
-        $result = self::$persistence->readOne(['username' => $username], self::USER_STORE);
-        
-        return ($result && is_array($result));
-    }
+
 }

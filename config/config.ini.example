@@ -18,6 +18,10 @@ actions = login,logout,update
 auth = logout,update
 cli = create
 
+[personalData]
+actions = read,update
+auth = read,update
+
 
 ;module_action_parameter = REQUIRED
 ;module_action_parameter = DEFAULT_10
