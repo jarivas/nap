@@ -7,7 +7,6 @@ use \Core\Db\Persistence as DB;
 abstract class Action {
 
     const USER_STORE = 'user';
-    const PERSONAL_DATA_STORE = 'personalData';
 
     abstract public static function process(array $params, DB $persistence): array;
 
