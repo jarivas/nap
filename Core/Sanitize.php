@@ -4,8 +4,8 @@ namespace Core;
 
 use Exception;
 
-class Sanitize {
-
+class Sanitize
+{
     const DATETIME_FORMAT = 'Y-m-d H:i:s';
 
     /**
@@ -14,7 +14,8 @@ class Sanitize {
      * @param array $parameters
      * @return array
      */
-    public static function process(string $module, string $action, array &$parameters): array {
+    public static function process(string $module, string $action, array &$parameters): array
+    {
         $preKey = "{$module}_{$action}_";
         $rules = self::getRules($preKey);
         $parameterName = '';
@@ -36,7 +37,8 @@ class Sanitize {
         return [true, ""];
     }
 
-    protected static function getRules(string $preKey) {
+    protected static function getRules(string $preKey)
+    {
         $sanitize = Configuration::getData('sanitize');
 
         $result = [];
@@ -51,7 +53,8 @@ class Sanitize {
         return $result;
     }
 
-    protected static function applyFilters(string $filters, string $parameterName, array &$parameters, array &$errors) {
+    protected static function applyFilters(string $filters, string $parameterName, array &$parameters, array &$errors)
+    {
         $filtersError = [];
 
         $value = $parameters[$parameterName];
@@ -67,7 +70,8 @@ class Sanitize {
         }
     }
 
-    protected static function applyFilter(string $filter, array &$filtersError, &$value) {        
+    protected static function applyFilter(string $filter, array &$filtersError, &$value)
+    {
         $pieces = explode('_', $filter);
 
         switch ($pieces[0]) {
@@ -102,7 +106,7 @@ class Sanitize {
                 if (!count($flag)) {
                     $value = filter_var($value, constant($filter));
                 } else {
-                    $value = filter_var($value, constant($flag[0]), constant($flag[1]));                    
+                    $value = filter_var($value, constant($flag[0]), constant($flag[1]));
                 }
 
                 if (!$value) {
@@ -112,8 +116,8 @@ class Sanitize {
         }
     }
     
-    protected static function getFilterFlag(string $filter): array {
-        
+    protected static function getFilterFlag(string $filter): array
+    {
         if (strpos($filter, '-') === false) {
             return [];
         }
@@ -121,7 +125,8 @@ class Sanitize {
         return explode('-', $filter);
     }
 
-    protected static function getErrorMsg(array &$error): string {
+    protected static function getErrorMsg(array &$error): string
+    {
         $result = '';
 
         foreach ($error as $param => $errors) {
@@ -130,5 +135,4 @@ class Sanitize {
 
         return $result;
     }
-
 }

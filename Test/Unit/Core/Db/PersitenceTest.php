@@ -8,13 +8,14 @@ use PHPUnit\Framework\TestCase;
 use Core\Configuration as CoreConfig;
 use Core\Db\Persistence as DB;
 
-final class PersitenceTest extends TestCase {
-
+final class PersitenceTest extends TestCase
+{
     private static $storeName = 'user';
     private $item = ['name' => 'Jose', 'age' => 37];
     private $iniFile = ROOT_DIR . 'Test/config/config.ini';
 
-    public function testConfiguration(): void {
+    public function testConfiguration(): void
+    {
         list($result, $message) = CoreConfig::init($this->iniFile);
 
         $this->assertTrue($result, "Error on config init: $message");
@@ -33,7 +34,8 @@ final class PersitenceTest extends TestCase {
     /**
      * @depends testConfiguration
      */
-    public function testGetPersitence(): void {
+    public function testGetPersitence(): void
+    {
         $persistence = DB::getPersistence();
 
         $this->assertIsObject($persistence, "Error getting persistence");
@@ -42,7 +44,8 @@ final class PersitenceTest extends TestCase {
     /**
      * @depends testGetPersitence
      */
-    public function testDeleteAll(): void {
+    public function testDeleteAll(): void
+    {
         $persistence = DB::getPersistence();
         $criteria = [
             '_id' => [DB::CRITERIA_AND, DB::CRITERIA_NOT_EQUAL, 0]
@@ -56,7 +59,8 @@ final class PersitenceTest extends TestCase {
     /**
      * @depends testDeleteAll
      */
-    public function testReadAll(): void {
+    public function testReadAll(): void
+    {
         $persistence = DB::getPersistence();
         $criteria = [
             '_id' => [DB::CRITERIA_AND, DB::CRITERIA_NOT_EQUAL, 0]
@@ -70,7 +74,8 @@ final class PersitenceTest extends TestCase {
     /**
      * @depends testReadAll
      */
-    public function testCreate(): void {
+    public function testCreate(): void
+    {
         $persistence = DB::getPersistence();
 
         $result = $persistence->create($this->item, self::$storeName);
@@ -90,7 +95,8 @@ final class PersitenceTest extends TestCase {
     /**
      * @depends testCreate
      */
-    public function testRead(): void {
+    public function testRead(): void
+    {
         $persistence = DB::getPersistence();
         $criteria = [
             'name' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $this->item['name']]
@@ -103,7 +109,8 @@ final class PersitenceTest extends TestCase {
         $this->assertSame($this->item['name'], $result['name'], 'Error on read, item returned is different');
     }
 
-    public function testUpdate(): void {
+    public function testUpdate(): void
+    {
         $persistence = DB::getPersistence();
         $criteria = [
             'name' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $this->item['name']]
@@ -127,7 +134,8 @@ final class PersitenceTest extends TestCase {
         $this->assertSame($updatedItem['name'], $result['name'], 'Error on update, item was never updated');
     }
 
-    public static function tearDownAfterClass(): void {        
+    public static function tearDownAfterClass(): void
+    {
         $persistence = DB::getPersistence();
         $criteria = [
             '_id' => [DB::CRITERIA_AND, DB::CRITERIA_NOT_EQUAL, 0]
@@ -135,5 +143,4 @@ final class PersitenceTest extends TestCase {
 
         $result = $persistence->delete($criteria, 'user');
     }
-
 }

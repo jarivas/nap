@@ -8,8 +8,8 @@ use Core\Configuration as CoreConfig;
 use Core\BaseAuthentication as Auth;
 use Core\Db\Persistence as DB;
 
-
-class BaseAuthenticationTest extends TestCase {
+class BaseAuthenticationTest extends TestCase
+{
     private static $storeName = 'user';
     
     private $item = ['name' => 'Jose', 'age' => 37];
@@ -20,7 +20,6 @@ class BaseAuthenticationTest extends TestCase {
     
     public function testIsValidNoToken(): void
     {
-        
         $result = Auth::isValid([]);
         
         $this->assertFalse($result, 'This should not be true');
@@ -28,10 +27,9 @@ class BaseAuthenticationTest extends TestCase {
     
     /**
      * @depends testIsValidNoToken
-     */ 
+     */
     public function testIsValidRandomToken(): void
     {
-        
         list($result, $message) = CoreConfig::init($this->iniFile);
         
         $this->assertTrue($result, "Error on config init: $message");
@@ -50,16 +48,15 @@ class BaseAuthenticationTest extends TestCase {
         
         $result = Auth::isValid($auth);
         
-        $this->assertFalse($result, 'This should not be true');   
+        $this->assertFalse($result, 'This should not be true');
     }
     
     
     /**
      * @depends testIsValidRandomToken
-     */ 
+     */
     public function testIsValidRightToken(): void
     {
-        
         $item = $this->item;
         $item['token'] = $this->token;
         $auth = ['token' => $this->token];
@@ -75,7 +72,8 @@ class BaseAuthenticationTest extends TestCase {
         $this->assertTrue($result, 'Error validating the user');
     }
 
-    public static function tearDownAfterClass(): void {        
+    public static function tearDownAfterClass(): void
+    {
         $persistence = DB::getPersistence();
         $criteria = [
             '_id' => [DB::CRITERIA_AND, DB::CRITERIA_NOT_EQUAL, 0]

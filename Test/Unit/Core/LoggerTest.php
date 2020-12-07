@@ -6,11 +6,10 @@ namespace Test\Unit\Core;
 use PHPUnit\Framework\TestCase;
 use Core\Logger;
 
-class LoggerTest extends TestCase{
-    
+class LoggerTest extends TestCase
+{
     public function testCanLog(): void
     {
-        
         $result = Logger::canLog();
         
         $this->assertTrue($result, 'Problem with log permission');
@@ -18,7 +17,7 @@ class LoggerTest extends TestCase{
     
     /**
      * @depends testCanLog
-     */ 
+     */
     public function testLog(): void
     {
         $time = time();

@@ -21,7 +21,6 @@ trait Logger
 
             if ($system['debug'] || $level === Logger::CRITICAL
                     || $level === Logger::ERROR || $level === Logger::EMERGENCY) {
-                
                 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 7);
                 
                 $trace = array_slice($trace, 2);

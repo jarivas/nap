@@ -66,13 +66,11 @@ class Configuration
         ];
 
         if (isset($config['auth'])) {
-            
             $dummy = preg_replace("/\s+/", "", $config['auth']);
             $module['auth'] = explode(',', $dummy);
         }
 
         if (isset($config['cli'])) {
-            
             $dummy = preg_replace("/\s+/", "", $config['cli']);
             $module['cli'] = explode(',', $dummy);
         }

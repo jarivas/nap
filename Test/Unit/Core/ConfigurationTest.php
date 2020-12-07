@@ -8,24 +8,26 @@ use PHPUnit\Framework\TestCase;
 use Core\Configuration as CoreConfig;
 use Exception;
 
-class Configuration extends CoreConfig {
-
-    public static function processIniConfig(string $iniFile, string $jsonFile): array {
+class Configuration extends CoreConfig
+{
+    public static function processIniConfig(string $iniFile, string $jsonFile): array
+    {
         return parent::processIniConfig($iniFile, $jsonFile);
     }
 
-    public static function processIniModule(array &$config): array {
+    public static function processIniModule(array &$config): array
+    {
         return parent::processIniModule($config);
     }
-
 }
 
-class ConfigurationTest extends TestCase {
-    
+class ConfigurationTest extends TestCase
+{
     private $iniFile = ROOT_DIR . 'Test/config/config.ini';
     private $jsonFile = ROOT_DIR . 'Test/config/config.json';
     
-    public function testProcessIniModule(): void {
+    public function testProcessIniModule(): void
+    {
         $config = [];
         
         try {
@@ -59,7 +61,8 @@ class ConfigurationTest extends TestCase {
     /**
      * @depends testProcessIniModule
      */
-    public function testProcessIniConfig(): void {
+    public function testProcessIniConfig(): void
+    {
         $this->assertTrue(file_exists($this->iniFile), 'Ini file does not exists');
         
         if (file_exists($this->jsonFile)) {
@@ -88,7 +91,8 @@ class ConfigurationTest extends TestCase {
     /**
      * @depends testProcessIniConfig
      */
-    public function testGetData(): void {
+    public function testGetData(): void
+    {
         list($result, $msg) = Configuration::init($this->iniFile);
         
         $this->assertTrue($result, $msg);
@@ -104,7 +108,8 @@ class ConfigurationTest extends TestCase {
     /**
      * @depends testGetData
      */
-    public function testValidateModuleAction(): void {
+    public function testValidateModuleAction(): void
+    {
         $result = Configuration::validateModuleAction('user', 'login');
         $this->assertTrue($result, 'Module user, action login should be part of the test config');
     }
@@ -112,7 +117,8 @@ class ConfigurationTest extends TestCase {
     /**
      * @depends testGetData
      */
-    public function testShouldAuth(): void {
+    public function testShouldAuth(): void
+    {
         $result = Configuration::shouldAuth('user', 'logout');
         $this->assertTrue($result, 'Module user, action logout should be part of the test config');
     }
@@ -120,9 +126,9 @@ class ConfigurationTest extends TestCase {
     /**
      * @depends testGetData
      */
-    public function testIsCli(): void {
+    public function testIsCli(): void
+    {
         $result = Configuration::isCli('user', 'create');
         $this->assertTrue($result, 'Module user, action create should be part of the test config');
     }
-
 }

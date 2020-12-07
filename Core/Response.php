@@ -18,7 +18,7 @@ class Response
     const FATAL_INTERNAL_ERROR = 500;
 
     protected static function helper(int $code, string $message)
-    {        
+    {
         header("Content-type: application/json; charset=utf-8");
 
         http_response_code($code);

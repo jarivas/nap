@@ -31,9 +31,7 @@ class Request
 
     protected static function setRequestData(string $body)
     {
-
         if (!strlen($body)) {
-            
             throw new Exception('Empty body', Response::WARNING_BAD_REQUEST);
         }
         
@@ -46,12 +44,10 @@ class Request
         }
 
         if (empty($request['module'])) {
-            
             throw new Exception('Module is required', Response::WARNING_BAD_REQUEST);
         }
 
         if (empty($request['action'])) {
-            
             throw new Exception('Action is required', Response::WARNING_BAD_REQUEST);
         }
 
@@ -73,13 +69,11 @@ class Request
         $auth = self::$data['auth'];
 
         if (!Configuration::validateModuleAction($module, $action)) {
-            
             throw new Exception('Wrong Module and/or Action', Response::WARNING_BAD_REQUEST);
         }
 
         if (Configuration::shouldAuth($module, $action)) {
             if (!Authentication::isValid($auth)) {
-                
                 throw new Exception('Wrong login credentials', Response::WARNING_UNAUTHORIZED);
             }
         }
@@ -97,7 +91,6 @@ class Request
         list($ok, $msg) = Sanitize::process(self::$data['module'], self::$data['action'], $result);
 
         if (!$ok) {
-            
             throw new Exception($msg, Response::WARNING_BAD_REQUEST);
         }
 

@@ -7,36 +7,40 @@ namespace Test\Unit\Core;
 use PHPUnit\Framework\TestCase;
 use Core\Sanitize as CoreSanitize;
 
-class Sanitize extends CoreSanitize {
-
-    public static function getRules(string $preKey) {
+class Sanitize extends CoreSanitize
+{
+    public static function getRules(string $preKey)
+    {
         return parent::getRules($preKey);
     }
 
-    public static function applyFilters(string $filters, string $parameterName, array &$parameters, array &$errors) {
+    public static function applyFilters(string $filters, string $parameterName, array &$parameters, array &$errors)
+    {
         parent::applyFilters($filters, $parameterName, $parameters, $errors);
     }
 
-    public static function applyFilter(string $filter, array &$filtersError, &$value) {
+    public static function applyFilter(string $filter, array &$filtersError, &$value)
+    {
         parent::applyFilter($filter, $filtersError, $value);
     }
 
-    public static function getFilterFlag(string $filter): array {
+    public static function getFilterFlag(string $filter): array
+    {
         return parent::getFilterFlag($filter);
     }
 
-    public static function getErrorMsg(array &$error): string {
+    public static function getErrorMsg(array &$error): string
+    {
         return parent::getErrorMsg($error);
     }
-
 }
 
-class SanitizeTest extends TestCase {
-
+class SanitizeTest extends TestCase
+{
     private $iniFile = ROOT_DIR . 'Test/config/config.ini';
 
-    public function testConfig(): void {
-
+    public function testConfig(): void
+    {
         list($result, $msg) = Configuration::init($this->iniFile);
 
         $this->assertTrue($result, $msg);
@@ -45,7 +49,8 @@ class SanitizeTest extends TestCase {
     /**
      * @depends testConfig
      */
-    public function testGetRules(): void {
+    public function testGetRules(): void
+    {
         $module = 'user';
         $action = 'login';
         $preKey = "{$module}_{$action}_";
@@ -60,7 +65,8 @@ class SanitizeTest extends TestCase {
         $this->assertSame('REQUIRED+FILTER_SANITIZE_STRING', $rules['user_login_password']);
     }
 
-    private function ApplyFilterDefault(): void {
+    private function ApplyFilterDefault(): void
+    {
         $filter = 'DEFAULT_test';
         $filtersError = [];
         $value = '';
@@ -70,7 +76,8 @@ class SanitizeTest extends TestCase {
         $this->assertSame('test', $value);
     }
 
-    private function ApplyFilterRequired(): void {
+    private function ApplyFilterRequired(): void
+    {
         $filter = 'REQUIRED';
         $filtersError = [];
         $value = '';
@@ -86,7 +93,8 @@ class SanitizeTest extends TestCase {
         $this->assertCount(1, $filtersError);
     }
 
-    private function ApplyFilterDateTime(): void {
+    private function ApplyFilterDateTime(): void
+    {
         $filter = 'DATETIME';
         $filtersError = [];
         $value = '10-10-1992';
@@ -102,7 +110,8 @@ class SanitizeTest extends TestCase {
         $this->assertCount(1, $filtersError);
     }
 
-    private function ApplyFilterFilter(): void {
+    private function ApplyFilterFilter(): void
+    {
         $filter = 'FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH';
         $filtersError = [];
         $value = '<h1>Hello WorldÆØÅ!</h1>';
@@ -112,7 +121,8 @@ class SanitizeTest extends TestCase {
         $this->assertSame('Hello World!', $value);
     }
     
-    private function GetFilterFlag(): void {
+    private function GetFilterFlag(): void
+    {
         $filter = 'FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH';
         
         $flag = Sanitize::getFilterFlag($filter);
@@ -121,7 +131,8 @@ class SanitizeTest extends TestCase {
         $this->assertSame('FILTER_FLAG_STRIP_HIGH', $flag[1]);
     }
     
-    public function testApplyFilter(): void {
+    public function testApplyFilter(): void
+    {
         $this->ApplyFilterDefault();
         $this->ApplyFilterRequired();
         $this->ApplyFilterDateTime();
@@ -132,12 +143,13 @@ class SanitizeTest extends TestCase {
     /**
      * @depends testApplyFilter
      */
-    public function testApplyFilters(): void {
+    public function testApplyFilters(): void
+    {
         $parameters = ['username' => '', 'password' => ''];
         $errors = [];
         
         Sanitize::applyFilters('DEFAULT_jose+REQUIRED+FILTER_SANITIZE_STRING', 'username', $parameters, $errors);
-        $this->assertCount(0, $errors);        
+        $this->assertCount(0, $errors);
         
         Sanitize::applyFilters('REQUIRED+FILTER_SANITIZE_STRING+DEFAULT_jose', 'username', $parameters, $errors);
         $this->assertCount(0, $errors);

@@ -8,7 +8,6 @@ use Exception;
 
 abstract class Persistence
 {
-    
     const CRITERIA_AND = 'and';
     const CRITERIA_OR = 'or';
     const CRITERIA_EQUAL = '=';
@@ -34,7 +33,6 @@ abstract class Persistence
         $db = Configuration::getData('db');
         
         if (!$db || empty($db['type'])) {
-            
             throw new Exception('DB config does not exists or invalid', Response::FATAL_INTERNAL_ERROR);
         }
         

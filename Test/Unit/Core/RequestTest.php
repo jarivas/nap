@@ -6,14 +6,15 @@ namespace Test\Unit\Core;
 use PHPUnit\Framework\TestCase;
 use Core\Request as CoreRequest;
 
-class Request extends CoreRequest {
-    
+class Request extends CoreRequest
+{
     public static function setRequestData(string $body)
     {
         parent::setRequestData($body);
     }
     
-    public static function getData(): array {
+    public static function getData(): array
+    {
         return self::$data;
     }
 
@@ -30,7 +31,6 @@ class Request extends CoreRequest {
 
 class RequestTest extends TestCase
 {
-    
     public function testSetRequestData(): void
     {
         $body = <<<JSON
