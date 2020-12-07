@@ -15,11 +15,11 @@ POST {{url}} HTTP/1.1
 @token = {{login.response.body.token}}
 
 ###
-# @name getEducation
+# @name get
 POST {{url}} HTTP/1.1
 
 {
-    "module": "education",
+    "module": "certification",
     "action": "read",
     "parameters": {
         "token": "{{token}}"

@@ -1,6 +1,6 @@
 ###
 # @name login
-POST http://nap.local HTTP/1.1
+POST {{url}} HTTP/1.1
 
 {
     "module": "user",
@@ -16,7 +16,7 @@ POST http://nap.local HTTP/1.1
 
 ###
 # @name update
-POST http://nap.local HTTP/1.1
+POST {{url}} HTTP/1.1
 
 {
     "module": "user",

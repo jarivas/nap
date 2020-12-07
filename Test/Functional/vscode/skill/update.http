@@ -15,31 +15,36 @@ POST {{url}} HTTP/1.1
 @token = {{login.response.body.token}}
 
 ###
-# @name updatePersonalData
+# @name create
 POST {{url}} HTTP/1.1
 
 {
-    "module": "personalData",
+    "module": "skill",
+    "action": "update",
+    "parameters": {
+        "name": "CSS",
+    }
+}
+###
+# @name update
+POST {{url}} HTTP/1.1
+
+{
+    "module": "skill",
     "action": "update",
     "parameters": {
         "token": "{{token}}",
-        "firstName": "Jose A",
-        "lastName": "Rivas",
-        "emailAddress": "me@jarivas.mail",
-        "dateOfBirth": "1983-01-01 00:00:00",
-        "industry": "IT",
-        "headline": "This is a headline",
-        "summary": "This is a really detailed summary",
-        "location": "Malaga, Andalusia, Spain"
+        "name": "CSS-3",
+        "_id": 1
     }
 }
 
 ###
-# @name getPersonalData
+# @name get
 POST {{url}} HTTP/1.1
 
 {
-    "module": "personalData",
+    "module": "skill",
     "action": "read",
     "parameters": {
         "token": "{{token}}"

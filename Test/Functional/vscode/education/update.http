@@ -1,6 +1,6 @@
 ###
 # @name login
-POST http://nap.local HTTP/1.1
+POST {{url}} HTTP/1.1
 
 {
     "module": "user",
@@ -16,7 +16,7 @@ POST http://nap.local HTTP/1.1
 
 ###
 # @name createPosition
-POST http://nap.local HTTP/1.1
+POST {{url}} HTTP/1.1
 
 {
     "module": "education",
@@ -32,7 +32,7 @@ POST http://nap.local HTTP/1.1
 }
 ###
 # @name updateEducation
-POST http://nap.local HTTP/1.1
+POST {{url}} HTTP/1.1
 
 {
     "module": "education",
@@ -50,7 +50,7 @@ POST http://nap.local HTTP/1.1
 
 ###
 # @name geteducation
-POST http://nap.local HTTP/1.1
+POST {{url}} HTTP/1.1
 
 {
     "module": "education",
