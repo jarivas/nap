@@ -21,8 +21,10 @@ POST {{url}} HTTP/1.1
 {
     "module": "user",
     "action": "update",
+    "auth": {
+        "token": "{{token}}"
+    },
     "parameters": {
-        "token": "{{token}}",
         "username": "{{username}}"
     }
 }

@@ -15,14 +15,16 @@ POST {{url}} HTTP/1.1
 @token = {{login.response.body.token}}
 
 ###
-# @name createPosition
+# @name create
 POST {{url}} HTTP/1.1
 
 {
     "module": "position",
     "action": "update",
+    "auth": {
+        "token": "{{token}}"
+    },
     "parameters": {
-        "token": "{{token}}",
         "company": "Micro-soft",
         "name": "Web Developer",
         "location": "Vancouver",
@@ -31,33 +33,37 @@ POST {{url}} HTTP/1.1
         "endDate": "2019-01-01 00:00:00"
     }
 }
+
+
 ###
-# @name updatePosition
+# @name update
 POST {{url}} HTTP/1.1
 
 {
     "module": "position",
     "action": "update",
+    "auth": {
+        "token": "{{token}}"
+    },
     "parameters": {
-        "token": "{{token}}",
         "company": "Microsoft",
         "name": "Web Developer",
         "location": "Vancouver",
         "description": "Bla description bla",
         "startDate": "1999-01-01 00:00:00",
-        "endDate": "2019-01-01 00:00:00"
+        "endDate": "2019-01-01 00:00:00",
         "_id": 1
     }
 }
 
 ###
-# @name getPositions
+# @name get
 POST {{url}} HTTP/1.1
 
 {
     "module": "position",
     "action": "read",
-    "parameters": {
+    "auth": {
         "token": "{{token}}"
     }
 }

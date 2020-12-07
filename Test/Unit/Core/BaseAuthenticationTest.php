@@ -46,9 +46,9 @@ class BaseAuthenticationTest extends TestCase {
         
         $this->assertTrue($result, 'Error on cleaning db');
         
-        $params = ['token' => $this->token];
+        $auth = ['token' => $this->token];
         
-        $result = Auth::isValid($params);
+        $result = Auth::isValid($auth);
         
         $this->assertFalse($result, 'This should not be true');   
     }
@@ -62,7 +62,7 @@ class BaseAuthenticationTest extends TestCase {
         
         $item = $this->item;
         $item['token'] = $this->token;
-        $params = ['token' => $this->token];
+        $auth = ['token' => $this->token];
         
         $persistence = DB::getPersistence();
          
@@ -71,7 +71,7 @@ class BaseAuthenticationTest extends TestCase {
         $this->assertTrue($result, 'Error creating the dummy user');
         
         
-        $result = Auth::isValid($params);
+        $result = Auth::isValid($auth);
         $this->assertTrue($result, 'Error validating the user');
     }
 
@@ -81,6 +81,6 @@ class BaseAuthenticationTest extends TestCase {
             '_id' => [DB::CRITERIA_AND, DB::CRITERIA_NOT_EQUAL, 0]
         ];
 
-        $result = $persistence->delete($criteria, 'user');
+        $persistence->delete($criteria, 'user');
     }
 }

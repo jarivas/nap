@@ -21,6 +21,9 @@ POST {{url}} HTTP/1.1
 {
     "module": "social",
     "action": "update",
+    "auth": {
+        "token": "{{token}}"
+    },
     "parameters": {
         "name": "Instagram",
         "url": "https://www.instagram.com/robotoslasers/",
@@ -34,8 +37,10 @@ POST {{url}} HTTP/1.1
 {
     "module": "social",
     "action": "update",
+    "auth": {
+        "token": "{{token}}"
+    },
     "parameters": {
-        "token": "{{token}}",
         "name": "Instagram",
         "url": "https://www.instagram.com/robotoslasers/",
         "icon": "https://www.instagram.com/static/images/ico/apple-touch-icon-76x76-precomposed.png/666282be8229.png",
@@ -50,7 +55,7 @@ POST {{url}} HTTP/1.1
 {
     "module": "social",
     "action": "read",
-    "parameters": {
+    "auth": {
         "token": "{{token}}"
     }
 }

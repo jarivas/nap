@@ -8,13 +8,13 @@ class BaseAuthentication
 {
     const DATA_STORE = 'user';
 
-    public static function isValid(array $params): bool
+    public static function isValid(array $auth): bool
     {
-        if (empty($params['token'])) {
+        if (empty($auth['token'])) {
             return false;
         }
 
-        $criteria = ['token' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $params['token']]];
+        $criteria = ['token' => [DB::CRITERIA_AND, DB::CRITERIA_EQUAL, $auth['token']]];
 
         $item = DB::getPersistence()->readOne($criteria, self::DATA_STORE);
         

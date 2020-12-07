@@ -15,14 +15,16 @@ POST {{url}} HTTP/1.1
 @token = {{login.response.body.token}}
 
 ###
-# @name updatePersonalData
+# @name update
 POST {{url}} HTTP/1.1
 
 {
     "module": "personalData",
     "action": "update",
+    "auth": {
+        "token": "{{token}}"
+    },
     "parameters": {
-        "token": "{{token}}",
         "firstName": "Jose A",
         "lastName": "Rivas",
         "emailAddress": "me@jarivas.mail",
@@ -35,13 +37,13 @@ POST {{url}} HTTP/1.1
 }
 
 ###
-# @name getPersonalData
+# @name get
 POST {{url}} HTTP/1.1
 
 {
     "module": "personalData",
     "action": "read",
-    "parameters": {
+    "auth": {
         "token": "{{token}}"
     }
 }

@@ -55,6 +55,10 @@ class Request
             throw new Exception('Action is required', Response::WARNING_BAD_REQUEST);
         }
 
+        if (empty($request['auth'])) {
+            $request['auth'] = [];
+        }
+
         if (empty($request['parameters'])) {
             $request['parameters'] = [];
         }
@@ -66,6 +70,7 @@ class Request
     {
         $module = self::$data['module'];
         $action = self::$data['action'];
+        $auth = self::$data['auth'];
 
         if (!Configuration::validateModuleAction($module, $action)) {
             
@@ -73,7 +78,7 @@ class Request
         }
 
         if (Configuration::shouldAuth($module, $action)) {
-            if (!Authentication::isValid(self::$data['parameters'])) {
+            if (!Authentication::isValid($auth)) {
                 
                 throw new Exception('Wrong login credentials', Response::WARNING_UNAUTHORIZED);
             }

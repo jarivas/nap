@@ -21,8 +21,11 @@ POST {{url}} HTTP/1.1
 {
     "module": "language",
     "action": "update",
+    "auth": {
+        "token": "{{token}}"
+    },
     "parameters": {
-        "name": "Daedric",
+        "name": "Daedri22c",
         "level": "Skyrim"
     }
 }
@@ -33,8 +36,10 @@ POST {{url}} HTTP/1.1
 {
     "module": "language",
     "action": "update",
+    "auth": {
+        "token": "{{token}}"
+    },
     "parameters": {
-        "token": "{{token}}",
         "name": "Daedric+",
         "level": "Skyrim",
         "_id": 1
@@ -48,7 +53,7 @@ POST {{url}} HTTP/1.1
 {
     "module": "language",
     "action": "read",
-    "parameters": {
+    "auth": {
         "token": "{{token}}"
     }
 }
