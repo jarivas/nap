@@ -19,43 +19,41 @@ POST http://nap.local HTTP/1.1
 POST http://nap.local HTTP/1.1
 
 {
-    "module": "position",
+    "module": "education",
     "action": "update",
     "parameters": {
         "token": "{{token}}",
-        "company": "Micro-soft",
-        "name": "Web Developer",
-        "location": "Vancouver",
-        "description": "Bla description bla",
-        "startDate": "1999-01-01 00:00:00",
-        "endDate": "2019-01-01 00:00:00"
+        "degree": "MIT Software developer",
+        "notes": "This is a note",
+        "schoolName": "Montreal Institute Techinal",
+        "startDate": "2000-01-01 00:00:00",
+        "endDate": "2000-01-01 00:00:01"
     }
 }
 ###
-# @name updatePosition
+# @name updateEducation
 POST http://nap.local HTTP/1.1
 
 {
-    "module": "position",
+    "module": "education",
     "action": "update",
     "parameters": {
         "token": "{{token}}",
-        "company": "Microsoft",
-        "name": "Web Developer",
-        "location": "Vancouver",
-        "description": "Bla description bla",
-        "startDate": "1999-01-01 00:00:00",
-        "endDate": "2019-01-01 00:00:00"
+        "degree": "MIT Software developer",
+        "notes": "This is a note2",
+        "schoolName": "Montreal Institute Techinal",
+        "startDate": "2000-01-01 00:00:00",
+        "endDate": "2000-01-01 00:00:01"
         "_id": 1
     }
 }
 
 ###
-# @name getPositions
+# @name geteducation
 POST http://nap.local HTTP/1.1
 
 {
-    "module": "position",
+    "module": "education",
     "action": "read",
     "parameters": {
         "token": "{{token}}"

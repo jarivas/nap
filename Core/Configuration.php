@@ -98,7 +98,7 @@ class Configuration
      */
     public static function validateModuleAction(string $module, string $action): bool
     {
-        return in_array($action, self::$modules[$module]['actions']);
+        return !empty(self::$modules[$module]) && in_array($action, self::$modules[$module]['actions']);
     }
 
     /**
@@ -109,7 +109,7 @@ class Configuration
      */
     public static function shouldAuth(string $module, string $action): bool
     {
-        return in_array($action, self::$modules[$module]['auth']);
+        return !empty(self::$modules[$module]) && in_array($action, self::$modules[$module]['auth']);
     }
 
     /**
@@ -120,6 +120,6 @@ class Configuration
      */
     public static function isCli(string $module, string $action): bool
     {
-        return in_array($action, self::$modules[$module]['cli']);
+        return !empty(self::$modules[$module]) && in_array($action, self::$modules[$module]['cli']);
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Api\Modules\PersonalData;
+namespace Api\Modules\Education;
 
 use Core\Db\Persistence as DB;
 use Core\Action;
 
 class Read extends Action
 {
-    const EDUCATION_STORE = 'personalData';
+    const EDUCATION_STORE = 'education';
     
     const DEFAULT_FIELDS =  [
         'degree',
@@ -21,7 +21,7 @@ class Read extends Action
     {
         $criteria = self::getUserCriteria();
         
-        $item = $persistence->read($criteria, self::EDUCATION_STORE);
+        $items = $persistence->read($criteria, self::EDUCATION_STORE);
         
         return ['success' => true, 'data' => $items ? $items : self::getDefaultResult(self::DEFAULT_FIELDS)];
     }
