@@ -1,0 +1,88 @@
+[system]
+debug = true
+
+[cors]
+allowed-origin = *
+allowed-methods = POST, OPTIONS
+allowed-headers = X-Requested-With, Content-Type, Accept, Origin, AUTH
+
+[db]
+type = sleek
+
+[sleek]
+data_folder = data
+name = cv
+
+[user]
+actions = login,logout,update
+auth = logout,update
+cli = create
+
+[personalData]
+actions = read,update
+auth = read,update
+
+[position]
+actions = read,update
+auth = read,update
+
+[education]
+actions = read,update
+auth = read,update
+
+[certification]
+actions = read,update
+auth = read,update
+
+[language]
+actions = read,update
+auth = read,update
+
+[skill]
+actions = read,update
+auth = read,update
+
+[social]
+actions = read,update
+auth = read,update
+
+
+;module_action_parameter = REQUIRED
+;module_action_parameter = DEFAULT_10
+;module_action_parameter = DATETIME (format Y-m-d H:i:s)
+;Sanitize filters : https://www.php.net/manual/en/filter.filters.sanitize.php
+;Validate Filters : https://www.php.net/manual/en/filter.filters.validate.php
+;Sanitize before Validate: REQUIRED|FILTER_SANITIZE_NUMBER_INT|FILTER_VALIDATE_INT
+
+[sanitize]
+user_login_username = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+user_login_password = REQUIRED+FILTER_SANITIZE_STRING
+personalData_update_firstName = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+personalData_update_lastName = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+personalData_update_emailAddress = REQUIRED+FILTER_SANITIZE_EMAIL
+personalData_update_dateOfBirth = REQUIRED+DATETIME
+personalData_update_industry = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+personalData_update_headline = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+personalData_update_summary = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+personalData_update_location = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+position_update_company = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+position_update_name = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+position_update_location = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+position_update_description = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+position_update_description = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+position_update_startDate = REQUIRED+DATETIME
+position_update_endDate = REQUIRED+DATETIME
+education_update_degree = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+education_update_notes = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+education_update_schoolName = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+education_update_startDate = REQUIRED+DATETIME
+education_update_endDate = REQUIRED+DATETIME
+education_update_notes = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+certification_update_name = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+certification_update_authority = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+language_update_name = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+language_update_level = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+skill_update_name = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+social_update_name = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+social_update_url = REQUIRED+FILTER_SANITIZE_URL
+social_update_icon = REQUIRED+FILTER_SANITIZE_URL

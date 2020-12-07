@@ -1,16 +1,48 @@
 <?php
 
-//A php file cache system is recommended like OPcache
+define('ROOT_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR);
+define('CORE_DIR', ROOT_DIR . 'Core' . DIRECTORY_SEPARATOR);
 
-require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'nap' . DIRECTORY_SEPARATOR . 'load.php';
+require CORE_DIR . 'autoload.php';
 
-require FUNCTIONS_DIR . 'log_writer.php';
+use Core\Logger;
+use Core\Configuration;
+use Core\Response;
+use Core\Request;
 
-//error handling
-require FUNCTIONS_DIR . 'errorHandler.php';
+if (!Logger::canLog()) {
+    die('Fatal error on the server');
+}
 
-//basic request validation
-require FUNCTIONS_DIR . 'requestValidation.php';
+Logger::setRequestId(uniqid('', true));
 
-//start
-Nap\Response::ok(call_user_func_array([$controller, $action], [$params, $persistence]));
+$iniFile = ROOT_DIR .'config/config.ini';
+
+list($ok, $msg) = Configuration::init($iniFile);
+
+if (!$ok) {
+    die($msg);
+}
+
+require CORE_DIR . 'error_handler.php';
+
+if (strtoupper($_SERVER['REQUEST_METHOD']) == 'OPTIONS') {
+    $cors = Configuration::getData('cors');
+
+    header("Access-Control-Allow-Origin: {$cors['allowed-origins']}");
+    header("Access-Control-Allow-Headers: {$cors['allowed-headers']}");
+    header("Access-Control-Allow-Methods: POST OPTIONS");
+
+    Response::okEmpty(Response::OK_NO_CONTENT);
+}
+
+if (strtoupper($_SERVER['REQUEST_METHOD']) !== 'POST') {
+    $msg = 'Invalid method';
+
+    Logger::warning($msg);
+    Response::warning(Response::WARNING_METHOD_NOT_ALLOWED, $msg);
+}
+
+$response = Request::getResponse();
+        
+Response::ok($response);
