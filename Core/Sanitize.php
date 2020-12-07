@@ -54,7 +54,7 @@ class Sanitize {
     protected static function applyFilters(string $filters, string $parameterName, array &$parameters, array &$errors) {
         $filtersError = [];
 
-        $value = $parameters[$parameterName];
+        $value = (empty($parameters[$parameterName])) ? null : $parameters[$parameterName];
         
         foreach (explode('+', $filters) as $filter) {
             self::applyFilter($filter, $filtersError, $value);

@@ -47,9 +47,9 @@ abstract class Action {
     }
     
     protected static function getSkip(array &$params):int {
-        $page = 1;
+        $page = 0;
         
-        if (intval($params['page']) > $page) {
+        if (isset($params['page']) && intval($params['page']) > $page) {
             $page = intval($params['page']);
         }
         
