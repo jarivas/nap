@@ -1,0 +1,28 @@
+[system]
+debug = true
+
+[cors]
+allowed-origin = *
+allowed-headers = X-Requested-With, Content-Type, Accept, Origin, Authentication
+allowed-methods = POST GET UPDATE DELETE
+
+[authentication]
+class = Nap\Tests\Authentication\Authentication
+user = test
+password = test
+
+[logger]
+class = Nap\Tests\Logger\FileLogger
+
+[dthelper]
+date_time_format = Y-m-d H:i:s
+date_time_zone = Europe/Madrid
+
+[dummy]
+actions = read,update
+auth = update
+
+[sanitize]
+dummy_update_string = REQUIRED+FILTER_SANITIZE_STRING-FILTER_FLAG_STRIP_HIGH
+dummy_update_default = REQUIRED+DEFAULT_10
+dummy_update_date = REQUIRED+DATETIME

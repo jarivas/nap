@@ -1,0 +1,22 @@
+{
+  "name": "jarivas/nap",
+  "description": "An extremely simple REST/JSON PHP framework,",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jose A Rivas",
+      "email": "me@jarivas.work"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {"Nap\\": "src/"}
+  },
+  "autoload-dev": {
+    "psr-4": { "Nap\\Tests\\": "tests/unit/" }
+  },
+  "require": {
+
+  }
+}
