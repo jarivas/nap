@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="Nap Test Suite">
+            <file>./unit/Configuration/ConfigurationTest.php</file>
+            <file>./unit/DTHelperTest.php</file>
+            <file>./unit/Sanitize/SanitizeTest.php</file>
+            <file>./unit/Logger/LoggerTest.php</file>
+            <file>./unit/Authentication/AuthenticationTest.php</file>
+            <file>./unit/RequestTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

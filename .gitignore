@@ -6,9 +6,9 @@
 ._*
 *.phprj
 *.workspace
-config/config.php
-config/config.json
-config/config.ini
+tests/config/config.php
+tests/config/config.json
+tests/config/config.ini
 composer.lock
 /nbproject/*
 nbproject/*
@@ -20,3 +20,5 @@ NoSQLData/
 /tools/php-cs-fixer/vendor/
 /Test/config/config.json
 /tools/phpunit/vendor/
+tests/.phpunit.result.cache
+/tests/log/
