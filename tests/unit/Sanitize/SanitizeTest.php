@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nap\Tests\Sanitize;
 
+use Nap\Tests\Request\Request;
 use PHPUnit\Framework\TestCase;
 use Nap\Tests\SetUpConfig;
 use Nap\Configuration\Configuration;
@@ -25,6 +26,9 @@ class SanitizeTest extends TestCase {
         $config = Configuration::getData('sanitize');
 
         $this->assertIsArray($config, 'the config from sanitize is not an array');
+
+        $result = Request::initDateTime();
+        $this->assertNull($result, 'problem on initDateTime');
 
         $result = Sanitize::setConfig($config);
         $this->assertTrue($result, 'error on init');
@@ -89,7 +93,7 @@ class SanitizeTest extends TestCase {
 
         Sanitize::applyFilter($filter, $filtersError, $value);
 
-        $this->assertCount(2, $filtersError);
+        $this->assertCount(1, $filtersError);
 
         $value = '1992-10-10';
 

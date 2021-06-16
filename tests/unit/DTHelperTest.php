@@ -21,11 +21,11 @@ class DTHelperTest extends TestCase
         $result = Configuration::initByIni($this->iniFile);
         $this->assertNull($result, 'initByIni is failing');
 
-        $config = Configuration::getData('dthelper');
+        $config = Configuration::getData('datetime');
 
-        $this->assertIsArray($config, 'the config from dthelper is not an array');
-        $this->assertArrayHasKey('date_time_format', $config, 'dthelper has no date_time_format value on get data');
-        $this->assertArrayHasKey('date_time_zone', $config, 'dthelper has no date_time_zone value on get data');
+        $this->assertIsArray($config, 'the config from datetime is not an array');
+        $this->assertArrayHasKey('date_time_format', $config, 'datetime has no date_time_format value on get data');
+        $this->assertArrayHasKey('date_time_zone', $config, 'datetime has no date_time_zone value on get data');
 
         $result = DTHelper::setConfig($config);
         $this->assertTrue($result, 'error on setConfig');
