@@ -9,6 +9,7 @@ namespace Nap;
  * @method static bool alert(string $message)
  * @method static bool critical(string $message)
  * @method static bool error(string $message)
+ * @method static bool warning(string $message)
  * @method static bool notice(string $message)
  * @method static bool info(string $message)
  * @method static bool debug(string $message)
