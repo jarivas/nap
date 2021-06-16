@@ -46,9 +46,9 @@ class Response
         die;
     }
 
-    public static function warning(string $message, int $warning_type)
+    public static function warning(string $message, int $warningType)
     {
-        self::helper($warning_type, json_encode(['message' => $message]));
+        self::helper($warningType, json_encode(['message' => $message]));
     }
 
     protected static function helper(int $code, string $message)
