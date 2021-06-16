@@ -30,7 +30,7 @@ class Configuration
      */
     public static function initByJson(string $jsonFile): ?array
     {
-        if (file_exists($jsonFile)) {
+        if (!file_exists($jsonFile)) {
             return ['json config file not present', Response::FATAL_INTERNAL_ERROR];
         }
 
