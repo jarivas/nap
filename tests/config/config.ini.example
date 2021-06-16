@@ -14,7 +14,7 @@ password = test
 [logger]
 class = Nap\Tests\Logger\FileLogger
 
-[dthelper]
+[datetime]
 date_time_format = Y-m-d H:i:s
 date_time_zone = Europe/Madrid
 
