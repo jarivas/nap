@@ -14,6 +14,11 @@ class Request
     /**
      * @var string
      */
+    protected static string $moduleConfig;
+
+    /**
+     * @var string
+     */
     protected static string $action;
 
     /**
@@ -60,7 +65,7 @@ class Request
 
         $className = self::getResponseClassName();
 
-        $className::setConfig(Configuration::getModuleData(self::$module));
+        $className::setConfig(Configuration::getModuleData(self::$moduleConfig));
 
         return $className::process(self::$request);
     }
@@ -110,6 +115,7 @@ class Request
             return ['Wrong login credentials', Response::WARNING_UNAUTHORIZED];
         }
 
+        self::$moduleConfig = $urlParams[0];
         self::$module = ucfirst($urlParams[0]);
         self::$action = ucfirst($urlParams[1]);
 
