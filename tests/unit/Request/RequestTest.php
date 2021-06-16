@@ -78,48 +78,6 @@ JSON;
     /**
      * @depends testInit
      */
-    public function testSetRequestHelper() :void
-    {
-        $result = Request::setRequestHelper('asd');
-        $this->assertIsArray($result, 'an invalid method works');
-
-        $result = Request::setRequestHelper('get');
-        $this->assertNull($result, 'get should not be invalid');
-
-        $result = Request::setRequestHelper('post');
-        $this->assertNull($result, 'post should not be invalid');
-
-        $result = Request::setRequestHelper('put');
-        $this->assertNull($result, 'put should not be invalid');
-
-        $result = Request::setRequestHelper('delete');
-        $this->assertNull($result, 'delete should not be invalid');
-    }
-
-    /**
-     * @depends testInit
-     */
-    public function testSetRequest() :void
-    {
-        $result = Request::setRequest('asd');
-        $this->assertIsArray($result, 'an invalid method works');
-
-        $result = Request::setRequest('get');
-        $this->assertNull($result, 'get should not be invalid');
-
-        $result = Request::setRequest('post');
-        $this->assertNull($result, 'post should not be invalid');
-
-        $result = Request::setRequest('put');
-        $this->assertNull($result, 'put should not be invalid');
-
-        $result = Request::setRequest('delete');
-        $this->assertNull($result, 'delete should not be invalid');
-    }
-
-    /**
-     * @depends testInit
-     */
     public function testInitDateTime(): void
     {
         $result = Request::initDateTime();

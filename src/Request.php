@@ -179,6 +179,6 @@ class Request
 
     protected static function getResponseClassName(): string
     {
-        return sprintf("Action\\%s\\%s::process", self::$module, self::$action);
+        return sprintf("Action\\%s\\%s", self::$module, self::$action);
     }
 }

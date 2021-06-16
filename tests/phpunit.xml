@@ -8,7 +8,7 @@
             <file>./unit/Sanitize/SanitizeTest.php</file>
             <file>./unit/Logger/LoggerTest.php</file>
             <file>./unit/Authentication/AuthenticationTest.php</file>
-            <file>./unit/RequestTest.php</file>
+            <file>./unit/Request/RequestTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
