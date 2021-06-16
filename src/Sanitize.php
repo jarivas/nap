@@ -17,7 +17,7 @@ class Sanitize
     public static function process(string $module, string $action, array &$request): ?array
     {
         $preKey = "{$module}_{$action}_";
-        $rules = self::getRules(self::$config, $preKey);
+        $rules = self::getRules($preKey);
         $parameterName = '';
         $errors = [];
 

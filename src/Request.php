@@ -174,7 +174,7 @@ class Request
             return ['Problems on Sanitize::init', Response::FATAL_INTERNAL_ERROR];
         }
 
-        return Sanitize::process(self::$module, self::$action, self::$request);;
+        return Sanitize::process(self::$module, self::$action, self::$request);
     }
 
     protected static function getResponseClassName(): string
