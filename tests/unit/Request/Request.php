@@ -21,11 +21,6 @@ class Request extends \Nap\Request
         return parent::setRequestByJson($body);
     }
 
-    public static function setRequestByQueryString(array $getParams)
-    {
-        parent::setRequestByQueryString($getParams);
-    }
-
     public static function initDateTime(): ?array
     {
         return parent::initDateTime();
