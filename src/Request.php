@@ -22,6 +22,11 @@ class Request
     protected static string $action;
 
     /**
+     * @var string
+     */
+    protected static string $actionConfig;
+
+    /**
      *
      * @var array
      */
@@ -116,6 +121,7 @@ class Request
         }
 
         self::$moduleConfig = $urlParams[0];
+        self::$actionConfig = $urlParams[1];
         self::$module = ucfirst($urlParams[0]);
         self::$action = ucfirst($urlParams[1]);
 
@@ -125,17 +131,21 @@ class Request
     protected static function setRequestHelper(string $method): ?array
     {
         $result = null;
+        $cors = Configuration::getData('cors');
+        $method = strtoupper($method);
+        $allowedMethods = explode(' ', $cors['allowed-methods']);
+
+        if (!in_array($method, $allowedMethods)) {
+            return ['Wrong method', Response::WARNING_BAD_REQUEST];
+        }
 
         self::$request = is_array($_GET) ? $_GET : [];
 
-        switch (strtoupper($method)) {
+        switch ($method) {
             case 'POST':
             case 'PUT':
             case 'DELETE':
                 $result = self::setRequestByJson('php://input');
-                break;
-            default:
-                $result = ['Wrong method', Response::WARNING_BAD_REQUEST];
                 break;
         }
 
@@ -145,17 +155,13 @@ class Request
     protected static function setRequestByJson(string $body): ?array
     {
         if (empty($body)) {
-            return['Empty body', Response::WARNING_BAD_REQUEST];
+            return null;
         }
 
         $request = json_decode($body, true);
 
         if (!$request) {
             return['JSON not well formed', Response::WARNING_BAD_REQUEST];
-        }
-
-        if(empty(self::$request)) {
-            self::$request = [];
         }
 
         self::$request = array_merge(self::$request, $request);
@@ -178,7 +184,7 @@ class Request
             return ['Problems on Sanitize::init', Response::FATAL_INTERNAL_ERROR];
         }
 
-        return Sanitize::process(self::$module, self::$action, self::$request);
+        return Sanitize::process(self::$moduleConfig, self::$actionConfig, self::$request);
     }
 
     protected static function getResponseClassName(): string
