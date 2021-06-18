@@ -111,9 +111,6 @@ class Sanitize
                 $value = empty($flag) ? filter_var($value, constant($filter)) :
                     filter_var($value, constant($flag[0]), constant($flag[1]));
 
-                if (!$value) {
-                    $filtersError[] = "Invalid value for 'FILTER': $value";
-                }
                 break;
         }
     }
