@@ -11,14 +11,14 @@ class LoggerTest extends TestCase
 {
     use SetUpConfig;
 
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->SetUpConfig();
+        self::SetUpConfig();
     }
 
     public function testInit(): void
     {
-        $result = Configuration::initByIni($this->iniFile);
+        $result = Configuration::initByIni(self::$iniFile);
         $this->assertNull($result, 'initByIni is failing');
 
         $config = Configuration::getData('logger');

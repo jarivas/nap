@@ -11,15 +11,15 @@ class ConfigurationTest extends TestCase
 {
     use SetUpConfig;
 
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->SetUpConfig();
+        self::SetUpConfig();
     }
 
-    protected function tearDown(): void
+    public static function tearDownAfterClass(): void
     {
-        if (file_exists($this->jsonFile)) {
-            unlink($this->jsonFile);
+        if (file_exists(self::$jsonFile)) {
+            unlink(self::$jsonFile);
         }
     }
     
@@ -53,19 +53,19 @@ class ConfigurationTest extends TestCase
      */
     public function testProcessIniConfig(): void
     {
-        $this->assertTrue(file_exists($this->iniFile), 'Ini file does not exists');
+        $this->assertTrue(file_exists(self::$iniFile), 'Ini file does not exists');
         
-        if (file_exists($this->jsonFile)) {
-            $this->assertTrue(unlink($this->jsonFile), 'Json file exists and can not be deleted');
+        if (file_exists(self::$jsonFile)) {
+            $this->assertTrue(unlink(self::$jsonFile), 'Json file exists and can not be deleted');
         }
 
-        $result = Configuration::processIniConfig($this->iniFile, $this->jsonFile);
+        $result = Configuration::processIniConfig(self::$iniFile, self::$jsonFile);
 
         $this->assertNull($result, 'error on processIniConfig');
         
-        $this->assertTrue(file_exists($this->jsonFile), 'Json file does not exists');
+        $this->assertTrue(file_exists(self::$jsonFile), 'Json file does not exists');
         
-        list($data, $modules) = json_decode(file_get_contents($this->jsonFile), true);
+        list($data, $modules) = json_decode(file_get_contents(self::$jsonFile), true);
         
         $this->assertIsArray($data, 'Data from Json file is not an array');
         $this->assertIsArray($modules, 'Modules from Json file is not an array');
@@ -107,7 +107,7 @@ class ConfigurationTest extends TestCase
      */
     public function testGetData(): void
     {
-        $result = Configuration::initByIni($this->iniFile);
+        $result = Configuration::initByIni(self::$iniFile);
 
         $this->assertNull($result, 'initByIni is failing');
 

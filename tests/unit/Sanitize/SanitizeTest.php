@@ -13,14 +13,14 @@ class SanitizeTest extends TestCase {
 
     use SetUpConfig;
 
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->SetUpConfig();
+        self::SetUpConfig();
     }
 
     public function testInit(): void
     {
-        $result = Configuration::initByIni($this->iniFile);
+        $result = Configuration::initByIni(self::$iniFile);
         $this->assertNull($result, 'initByIni is failing');
 
         $config = Configuration::getData('sanitize');
@@ -165,7 +165,8 @@ JSON;
         $errors = [];
         
         Sanitize::applyFilters('DEFAULT_jose+REQUIRED+FILTER_SANITIZE_STRING', 'username', $parameters, $errors);
-        $this->assertCount(0, $errors);        
+        $this->assertCount(0, $errors);
+        $this->assertSame('jose', $parameters['username']);
         
         Sanitize::applyFilters('REQUIRED+FILTER_SANITIZE_STRING+DEFAULT_jose', 'username', $parameters, $errors);
         $this->assertCount(0, $errors);

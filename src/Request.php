@@ -126,14 +126,13 @@ class Request
     {
         $result = null;
 
+        self::$request = is_array($_GET) ? $_GET : [];
+
         switch (strtoupper($method)) {
             case 'POST':
             case 'PUT':
             case 'DELETE':
                 $result = self::setRequestByJson('php://input');
-                break;
-            case 'GET':
-                self::setRequestByQueryString($_GET);
                 break;
             default:
                 $result = ['Wrong method', Response::WARNING_BAD_REQUEST];
@@ -155,14 +154,13 @@ class Request
             return['JSON not well formed', Response::WARNING_BAD_REQUEST];
         }
 
-        self::$request = $request;
+        if(empty(self::$request)) {
+            self::$request = [];
+        }
+
+        self::$request = array_merge(self::$request, $request);
 
         return null;
-    }
-
-    protected static function setRequestByQueryString(array $getParams)
-    {
-        self::$request = $getParams;
     }
 
     protected static function initDateTime(): ?array

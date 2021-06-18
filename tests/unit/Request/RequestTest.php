@@ -11,13 +11,13 @@ class RequestTest extends TestCase
 {
     use SetUpConfig;
 
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->SetUpConfig();
+        self::SetUpConfig();
     }
 
     public function testInit(): void {
-        $result = Configuration::initByIni($this->iniFile);
+        $result = Configuration::initByIni(self::$iniFile);
         $this->assertNull($result, 'initByIni is failing');
 
         $_SERVER['REQUEST_URI'] = '/dummy/read';
@@ -62,17 +62,6 @@ JSON;
         $result = Request::setRequestByJson($body);
         $this->assertNull($result, 'A valid json creates a problem');
 
-    }
-
-    /**
-     * @depends testInit
-     */
-    public function testSetRequestByQueryString(): void{
-        $getParams = ['param1' => 'value1'];
-
-        Request::setRequestByQueryString($getParams);
-
-        $this->assertSame($getParams, Request::getRequest(), 'Problem setting query string');
     }
 
     /**
